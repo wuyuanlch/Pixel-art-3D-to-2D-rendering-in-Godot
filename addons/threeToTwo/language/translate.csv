@@ -1,0 +1,33 @@
+ID,zh_CN,en
+预览,预览,Preview
+上传模型,上传模型,Upload
+动画,动画,Animation
+开始,开始,Start
+循环,循环,Cycle
+环境光强度,环境光强度,Ambient Energy
+相机,相机,Camera
+位置,位置,Location
+旋转,旋转,Rotate
+缩放,缩放,Zoom
+统一缩放,统一缩放,Uniform Scale
+宽度,宽度,Width
+高度,高度,Height
+插值算法,插值算法,Algorithm
+材质,材质,Material
+关闭,关闭,Close
+导出当前贴图,导出当前贴图,Export Current
+导出普通贴图,导出普通贴图,Export Regular
+导出法线贴图,导出法线贴图,Export Normal
+导出两种材质,导出两种材质,Export Both
+批量导出(秒),批量导出(秒),Batch Export (s)
+批量导出,批量导出,Batch Export
+重置,重置,Reset
+语言,语言,Language
+模型,模型,Model
+普通材质,普通材质,Regular
+法线材质,法线材质,Normal
+选择3D模型,选择3D模型,Select 3D Model
+保存图片,保存图片,Save Image
+保存文件夹,保存文件夹,Save Folder
+灯光,灯光,Light
+控制灯光,控制灯光,Control

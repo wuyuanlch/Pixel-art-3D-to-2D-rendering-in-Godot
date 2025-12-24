@@ -1,0 +1,676 @@
+[gd_scene load_steps=11 format=3 uid="uid://cpgtlqtcymlrv"]
+
+[ext_resource type="Script" uid="uid://pjvcy5ex0uqg" path="res://addons/threeToTwo/scripts/main.gd" id="1_hlbgd"]
+[ext_resource type="Script" uid="uid://3trpesqf7jem" path="res://addons/threeToTwo/scripts/camera.gd" id="2_hlbgd"]
+[ext_resource type="Shader" uid="uid://diops5i7lvik8" path="res://addons/threeToTwo/shader/normal.gdshader" id="3_hcdc5"]
+[ext_resource type="Script" uid="uid://c5aa1ee61hd0g" path="res://addons/threeToTwo/scripts/translation_manager.gd" id="3_imsn2"]
+[ext_resource type="Theme" uid="uid://dnftf4fqghseg" path="res://addons/threeToTwo/scene/tres/theme.tres" id="4_hlbgd"]
+[ext_resource type="PackedScene" uid="uid://c85i3fx56v6tu" path="res://addons/threeToTwo/scene/preview_panel.tscn" id="4_imsn2"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_bss38"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="QuadMesh" id="QuadMesh_e2u21"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bss38"]
+render_priority = 0
+shader = ExtResource("3_hcdc5")
+
+[sub_resource type="Environment" id="Environment_hlbgd"]
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+
+[node name="Main" type="Control" node_paths=PackedStringArray("sprite2D2", "previewButton", "uploadButton", "modelCon", "languageSelector", "translation_manager", "previewPanel", "normalMesh", "cameraController", "resetCameraButton", "positionXInput", "positionYInput", "positionZInput", "rotationXInput", "rotationYInput", "rotationZInput", "caPosition", "caRotation", "cameraInfoLabel", "modelPositionXInput", "modelPositionYInput", "modelPositionZInput", "modelRotationXInput", "modelRotationYInput", "modelRotationZInput", "moPosition", "moRotation", "modelScaleXInput", "modelScaleYInput", "modelScaleZInput", "scaleModeButton", "moScale", "modelLabel", "worldEnvironmentEnergyInput", "worldEnvironment", "environmentLabel", "animationPlayButton", "animationTimeSlider", "animationTimeLabel", "animationTimeInput", "animationLabel", "loopCheckBox", "fileDialog", "directionalLight", "directionalLightCheckBox", "directionalLightRoCheckBox", "directionalLightLineEdit")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hlbgd")
+sprite2D2 = NodePath("Sprite2D")
+previewButton = NodePath("Control/yulan")
+uploadButton = NodePath("Control/uploadButton")
+modelCon = NodePath("SubViewport/Node3D/ModelContainer")
+languageSelector = NodePath("Control/LanguageSelector")
+translation_manager = NodePath("Translation")
+previewPanel = NodePath("PreviewPanel")
+normalMesh = NodePath("SubViewport/Node3D/Camera3D/NormalMesh")
+cameraController = NodePath("camera")
+resetCameraButton = NodePath("cameraInfo/resetCameraButton")
+positionXInput = NodePath("cameraInfo/positionXInput")
+positionYInput = NodePath("cameraInfo/positionYInput")
+positionZInput = NodePath("cameraInfo/positionZInput")
+rotationXInput = NodePath("cameraInfo/rotationXInput")
+rotationYInput = NodePath("cameraInfo/rotationYInput")
+rotationZInput = NodePath("cameraInfo/rotationZInput")
+caPosition = NodePath("cameraInfo/position")
+caRotation = NodePath("cameraInfo/rotation")
+cameraInfoLabel = NodePath("cameraInfo/cameraInfoLabel")
+modelPositionXInput = NodePath("model/modelPositionXInput")
+modelPositionYInput = NodePath("model/modelPositionYInput")
+modelPositionZInput = NodePath("model/modelPositionZInput")
+modelRotationXInput = NodePath("model/modelRotationXInput")
+modelRotationYInput = NodePath("model/modelRotationYInput")
+modelRotationZInput = NodePath("model/modelRotationZInput")
+moPosition = NodePath("model/position")
+moRotation = NodePath("model/rotation")
+modelScaleXInput = NodePath("model/modelScaleXInput")
+modelScaleYInput = NodePath("model/modelScaleYInput")
+modelScaleZInput = NodePath("model/modelScaleZInput")
+scaleModeButton = NodePath("model/scaleModeButton")
+moScale = NodePath("model/modelScale")
+modelLabel = NodePath("model/modelScale")
+worldEnvironmentEnergyInput = NodePath("worldEnvironment/worldEnvironmentEnergyInput")
+worldEnvironment = NodePath("SubViewport/Node3D/WorldEnvironment")
+environmentLabel = NodePath("worldEnvironment/Environment")
+animationPlayButton = NodePath("donghua/animationPlayButton")
+animationTimeSlider = NodePath("donghua/animationTimeSlider")
+animationTimeLabel = NodePath("donghua/animationTimeLabel")
+animationTimeInput = NodePath("donghua/animationTimeInput")
+animationLabel = NodePath("donghua/animationLabel")
+loopCheckBox = NodePath("donghua/loopCheckBox")
+fileDialog = NodePath("FileDialog")
+directionalLight = NodePath("SubViewport/Node3D/DirectionalLight3D")
+directionalLightCheckBox = NodePath("directionalLight/directionalLightCheckBox")
+directionalLightRoCheckBox = NodePath("directionalLight/directionalLightRoCheckBox")
+directionalLightLineEdit = NodePath("directionalLight/directionalLightLineEdit")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.32156864, 0.32156864, 0.32156864, 1)
+
+[node name="camera" type="Node" parent="." node_paths=PackedStringArray("camera3D", "normalMesh")]
+script = ExtResource("2_hlbgd")
+camera3D = NodePath("../SubViewport/Node3D/Camera3D")
+normalMesh = NodePath("../SubViewport/Node3D/Camera3D/NormalMesh")
+
+[node name="Translation" type="Node" parent="."]
+script = ExtResource("3_imsn2")
+
+[node name="Sprite2D" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -348.0
+offset_top = -284.0
+offset_right = 164.0
+offset_bottom = 228.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.9, 0.9)
+pivot_offset = Vector2(256, 256)
+texture = SubResource("ViewportTexture_bss38")
+
+[node name="ColorRect" type="ColorRect" parent="Sprite2D"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.8819366, 0.8819366, 0.88193655, 1)
+
+[node name="SubViewport" type="SubViewport" parent="."]
+own_world_3d = true
+transparent_bg = true
+
+[node name="Node3D" type="Node3D" parent="SubViewport"]
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 0, 0.8, 2)
+current = true
+
+[node name="NormalMesh" type="MeshInstance3D" parent="SubViewport/Node3D/Camera3D"]
+transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, -1.2, -6.5901923)
+visible = false
+mesh = SubResource("QuadMesh_e2u21")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_bss38")
+
+[node name="ModelContainer" type="Node3D" parent="SubViewport/Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewport/Node3D"]
+visible = false
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewport/Node3D"]
+environment = SubResource("Environment_hlbgd")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = 40.0
+offset_bottom = 20.0
+grow_vertical = 2
+
+[node name="yulan" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = 80.0
+offset_top = -142.0
+offset_right = 186.0
+offset_bottom = -99.0
+theme = ExtResource("4_hlbgd")
+text = "预览"
+text_overrun_behavior = 4
+
+[node name="uploadButton" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = 80.0
+offset_top = -11.0
+offset_right = 186.0
+offset_bottom = 32.0
+theme = ExtResource("4_hlbgd")
+text = "上传模型"
+
+[node name="LanguageSelector" type="OptionButton" parent="Control"]
+layout_mode = 0
+offset_left = 75.0
+offset_top = 136.0
+offset_right = 191.0
+offset_bottom = 179.0
+theme = ExtResource("4_hlbgd")
+alignment = 1
+text_overrun_behavior = 3
+selected = 0
+item_count = 2
+popup/item_0/text = "zh_CN"
+popup/item_0/id = 0
+popup/item_1/text = "en"
+popup/item_1/id = 1
+
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 53.0
+offset_top = 96.0
+offset_right = 214.0
+offset_bottom = 130.0
+theme = ExtResource("4_hlbgd")
+text = "语言(Language)"
+
+[node name="worldEnvironment" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="worldEnvironmentEnergyInput" type="LineEdit" parent="worldEnvironment"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -171.0
+offset_top = -220.0
+offset_right = -25.0
+offset_bottom = -182.72566
+grow_horizontal = 0
+theme = ExtResource("4_hlbgd")
+text = "1.00"
+placeholder_text = "环境光强度"
+alignment = 1
+
+[node name="Environment" type="Label" parent="worldEnvironment"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -388.0
+offset_top = -220.0
+offset_right = -234.0
+offset_bottom = -189.0
+grow_horizontal = 0
+theme = ExtResource("4_hlbgd")
+text = "环境光强度"
+
+[node name="cameraInfo" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -14.0
+offset_bottom = 26.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="resetCameraButton" type="Button" parent="cameraInfo"]
+layout_mode = 0
+offset_left = -124.0
+offset_top = -160.0
+offset_right = 6.0
+offset_bottom = -125.0
+theme = ExtResource("4_hlbgd")
+text = "重置相机"
+
+[node name="cameraInfoLabel" type="Label" parent="cameraInfo"]
+layout_mode = 0
+offset_left = -256.0
+offset_top = -160.0
+offset_right = -168.0
+offset_bottom = -129.0
+theme = ExtResource("4_hlbgd")
+text = "相机"
+
+[node name="positionXInput" type="LineEdit" parent="cameraInfo"]
+layout_mode = 0
+offset_left = -257.0
+offset_top = -111.0
+offset_right = -173.3125
+offset_bottom = -75.0
+theme = ExtResource("4_hlbgd")
+text = "0.00"
+placeholder_text = "X"
+alignment = 1
+
+[node name="positionYInput" type="LineEdit" parent="cameraInfo"]
+layout_mode = 0
+offset_left = -164.0
+offset_top = -111.0
+offset_right = -80.3125
+offset_bottom = -75.0
+theme = ExtResource("4_hlbgd")
+text = "0.80"
+placeholder_text = "Y"
+alignment = 1
+
+[node name="positionZInput" type="LineEdit" parent="cameraInfo"]
+layout_mode = 0
+offset_left = -69.0
+offset_top = -111.0
+offset_right = 14.6875
+offset_bottom = -75.0
+theme = ExtResource("4_hlbgd")
+text = "2.00"
+placeholder_text = "Z"
+alignment = 1
+
+[node name="rotationXInput" type="LineEdit" parent="cameraInfo"]
+layout_mode = 0
+offset_left = -257.0
+offset_top = -62.0
+offset_right = -173.3125
+offset_bottom = -26.0
+theme = ExtResource("4_hlbgd")
+text = "-0.00"
+placeholder_text = "X°"
+alignment = 1
+
+[node name="rotationYInput" type="LineEdit" parent="cameraInfo"]
+layout_mode = 0
+offset_left = -164.0
+offset_top = -62.0
+offset_right = -80.3125
+offset_bottom = -26.0
+theme = ExtResource("4_hlbgd")
+text = "0.00"
+placeholder_text = "Y°"
+alignment = 1
+
+[node name="rotationZInput" type="LineEdit" parent="cameraInfo"]
+layout_mode = 0
+offset_left = -69.0
+offset_top = -62.0
+offset_right = 14.6875
+offset_bottom = -26.0
+theme = ExtResource("4_hlbgd")
+text = "0.00"
+placeholder_text = "Z°"
+alignment = 1
+
+[node name="position" type="Label" parent="cameraInfo"]
+layout_mode = 0
+offset_left = -347.0
+offset_top = -111.0
+offset_right = -256.0
+offset_bottom = -80.0
+theme = ExtResource("4_hlbgd")
+text = "位置"
+
+[node name="rotation" type="Label" parent="cameraInfo"]
+layout_mode = 0
+offset_left = -347.0
+offset_top = -62.0
+offset_right = -277.0
+offset_bottom = -31.0
+theme = ExtResource("4_hlbgd")
+text = "旋转"
+
+[node name="model" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="modelLabel" type="Label" parent="model"]
+layout_mode = 0
+offset_left = -256.0
+offset_top = -5.0
+offset_right = -185.0
+offset_bottom = 26.0
+theme = ExtResource("4_hlbgd")
+text = "模型"
+
+[node name="modelPositionXInput" type="LineEdit" parent="model"]
+layout_mode = 0
+offset_left = -257.0
+offset_top = 41.0
+offset_right = -173.3125
+offset_bottom = 77.0
+theme = ExtResource("4_hlbgd")
+text = "0.00"
+placeholder_text = "X"
+alignment = 1
+
+[node name="modelPositionYInput" type="LineEdit" parent="model"]
+layout_mode = 0
+offset_left = -163.0
+offset_top = 41.0
+offset_right = -79.3125
+offset_bottom = 77.0
+theme = ExtResource("4_hlbgd")
+text = "0.00"
+placeholder_text = "Y"
+alignment = 1
+
+[node name="modelPositionZInput" type="LineEdit" parent="model"]
+layout_mode = 0
+offset_left = -68.0
+offset_top = 41.0
+offset_right = 15.6875
+offset_bottom = 77.0
+theme = ExtResource("4_hlbgd")
+text = "0.00"
+placeholder_text = "Z"
+alignment = 1
+
+[node name="modelRotationXInput" type="LineEdit" parent="model"]
+layout_mode = 0
+offset_left = -257.0
+offset_top = 85.0
+offset_right = -173.3125
+offset_bottom = 121.0
+theme = ExtResource("4_hlbgd")
+text = "0.00"
+placeholder_text = "X°"
+alignment = 1
+
+[node name="modelRotationYInput" type="LineEdit" parent="model"]
+layout_mode = 0
+offset_left = -163.0
+offset_top = 85.0
+offset_right = -79.3125
+offset_bottom = 121.0
+theme = ExtResource("4_hlbgd")
+text = "0.00"
+placeholder_text = "Y°"
+alignment = 1
+
+[node name="modelRotationZInput" type="LineEdit" parent="model"]
+layout_mode = 0
+offset_left = -68.0
+offset_top = 85.0
+offset_right = 15.6875
+offset_bottom = 121.0
+theme = ExtResource("4_hlbgd")
+text = "0.00"
+placeholder_text = "Z°"
+alignment = 1
+
+[node name="modelScaleXInput" type="LineEdit" parent="model"]
+layout_mode = 0
+offset_left = -257.0
+offset_top = 131.0
+offset_right = -173.3125
+offset_bottom = 167.0
+theme = ExtResource("4_hlbgd")
+text = "1.00"
+placeholder_text = "SX"
+alignment = 1
+
+[node name="modelScaleYInput" type="LineEdit" parent="model"]
+layout_mode = 0
+offset_left = -163.0
+offset_top = 131.0
+offset_right = -79.3125
+offset_bottom = 167.0
+theme = ExtResource("4_hlbgd")
+text = "1.00"
+placeholder_text = "SY"
+alignment = 1
+
+[node name="modelScaleZInput" type="LineEdit" parent="model"]
+layout_mode = 0
+offset_left = -68.0
+offset_top = 131.0
+offset_right = 15.6875
+offset_bottom = 167.0
+theme = ExtResource("4_hlbgd")
+text = "1.00"
+placeholder_text = "SZ"
+alignment = 1
+
+[node name="scaleModeButton" type="CheckBox" parent="model"]
+layout_mode = 0
+offset_left = -149.0
+offset_top = 180.0
+offset_right = 17.0
+offset_bottom = 215.0
+theme_override_font_sizes/font_size = 20
+button_pressed = true
+text = "统一缩放"
+
+[node name="position" type="Label" parent="model"]
+layout_mode = 0
+offset_left = -347.0
+offset_top = 45.0
+offset_right = -256.0
+offset_bottom = 76.0
+theme = ExtResource("4_hlbgd")
+text = "位置"
+
+[node name="rotation" type="Label" parent="model"]
+layout_mode = 0
+offset_left = -347.0
+offset_top = 85.0
+offset_right = -277.0
+offset_bottom = 116.0
+theme = ExtResource("4_hlbgd")
+text = "旋转"
+
+[node name="modelScale" type="Label" parent="model"]
+layout_mode = 0
+offset_left = -347.0
+offset_top = 131.0
+offset_right = -286.0
+offset_bottom = 162.0
+theme = ExtResource("4_hlbgd")
+text = "模型"
+
+[node name="donghua" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="animationLabel" type="Label" parent="donghua"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -449.0
+offset_top = -62.0
+offset_right = -338.0
+offset_bottom = -31.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("4_hlbgd")
+text = "动画"
+
+[node name="animationPlayButton" type="Button" parent="donghua"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -330.0
+offset_top = -62.0
+offset_right = -294.0
+offset_bottom = -27.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("4_hlbgd")
+text = "▶"
+
+[node name="loopCheckBox" type="CheckBox" parent="donghua"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -276.5
+offset_top = -62.0
+offset_right = -202.5
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 20
+text = "循环"
+
+[node name="animationTimeSlider" type="HSlider" parent="donghua"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -193.0
+offset_top = -53.0
+offset_right = 7.0
+offset_bottom = -33.0
+grow_horizontal = 2
+grow_vertical = 0
+max_value = 1.0
+step = 0.01
+
+[node name="animationTimeLabel" type="Label" parent="donghua"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -62.0
+offset_right = 152.0
+offset_bottom = -31.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("4_hlbgd")
+text = "0.00s / 0.00s"
+
+[node name="animationTimeInput" type="LineEdit" parent="donghua"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 164.0
+offset_top = -62.0
+offset_right = 299.0
+offset_bottom = -26.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("4_hlbgd")
+text = "0.00"
+placeholder_text = "输入时间 (秒)"
+alignment = 1
+
+[node name="directionalLight" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="directionalLightCheckBox" type="CheckBox" parent="directionalLight"]
+layout_mode = 0
+offset_left = -348.0
+offset_top = 32.0
+offset_right = -280.0
+offset_bottom = 68.0
+theme_override_font_sizes/font_size = 20
+text = "灯光"
+
+[node name="directionalLightLineEdit" type="LineEdit" parent="directionalLight"]
+layout_mode = 0
+offset_left = -127.0
+offset_top = 34.0
+offset_right = 13.0
+offset_bottom = 65.0
+theme = ExtResource("4_hlbgd")
+text = "1.00"
+placeholder_text = "灯光强度"
+alignment = 1
+
+[node name="directionalLightRoCheckBox" type="CheckBox" parent="directionalLight"]
+layout_mode = 0
+offset_left = -255.0
+offset_top = 32.0
+offset_right = -147.0
+offset_bottom = 68.0
+theme_override_font_sizes/font_size = 20
+text = "控制灯光"
+
+[node name="PreviewPanel" parent="." instance=ExtResource("4_imsn2")]
+layout_mode = 1
+
+[node name="FileDialog" type="FileDialog" parent="."]
+oversampling_override = 1.0
+title = "选择3D模型"
+initial_position = 2
+size = Vector2i(800, 550)
+mode_overrides_title = false
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.fbx;FBX文件", "*.gltf;GLTF文件", "*.glb;GLB文件", "*.obj;OBJ文件")

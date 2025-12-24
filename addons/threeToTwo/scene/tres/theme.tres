@@ -1,0 +1,72 @@
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://dnftf4fqghseg"]
+
+[ext_resource type="StyleBox" uid="uid://b5x8yxpdesbu7" path="res://addons/threeToTwo/scene/tres/normalFlat.tres" id="1_ncw2r"]
+[ext_resource type="StyleBox" uid="uid://dld5yxeslch20" path="res://addons/threeToTwo/scene/tres/lineNormalFlat.tres" id="2_dcice"]
+[ext_resource type="StyleBox" uid="uid://dsl2ef2528ux0" path="res://addons/threeToTwo/scene/tres/optiopn.tres" id="3_on5nm"]
+[ext_resource type="StyleBox" uid="uid://dbvggqu3pqpl6" path="res://addons/threeToTwo/scene/tres/popup_flat.tres" id="4_42j2s"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_on5nm"]
+bg_color = Color(0.28485015, 0.28485033, 0.2848502, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.094191335, 0.10784384, 0.13567007, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 8.0
+expand_margin_top = 3.0
+expand_margin_right = 8.0
+expand_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dcice"]
+bg_color = Color(0.11119685, 0.11119684, 0.11119684, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.094191335, 0.10784384, 0.13567007, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 8.0
+expand_margin_top = 3.0
+expand_margin_right = 8.0
+expand_margin_bottom = 3.0
+
+[sub_resource type="ImageTexture" id="ImageTexture_on5nm"]
+
+[resource]
+Button/font_sizes/font_size = 20
+Button/styles/focus = ExtResource("1_ncw2r")
+Button/styles/hover = SubResource("StyleBoxFlat_on5nm")
+Button/styles/normal = ExtResource("1_ncw2r")
+Button/styles/pressed = SubResource("StyleBoxFlat_dcice")
+Label/font_sizes/font_size = 20
+LineEdit/font_sizes/font_size = 20
+LineEdit/styles/normal = ExtResource("2_dcice")
+OptionButton/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+OptionButton/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+OptionButton/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+OptionButton/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+OptionButton/colors/font_outline_color = Color(0, 0, 0, 1)
+OptionButton/colors/font_pressed_color = Color(1, 1, 1, 1)
+OptionButton/constants/arrow_margin = 10
+OptionButton/constants/h_separation = 10
+OptionButton/font_sizes/font_size = 20
+OptionButton/icons/icon = SubResource("ImageTexture_on5nm")
+OptionButton/styles/disabled = ExtResource("3_on5nm")
+OptionButton/styles/disabled_mirrored = ExtResource("3_on5nm")
+OptionButton/styles/focus = ExtResource("3_on5nm")
+OptionButton/styles/hover = ExtResource("3_on5nm")
+OptionButton/styles/hover_mirrored = ExtResource("3_on5nm")
+OptionButton/styles/normal = ExtResource("3_on5nm")
+OptionButton/styles/normal_mirrored = ExtResource("3_on5nm")
+OptionButton/styles/pressed = ExtResource("3_on5nm")
+OptionButton/styles/pressed_mirrored = ExtResource("3_on5nm")
+PopupMenu/font_sizes/font_size = 18
+PopupMenu/styles/hover = ExtResource("4_42j2s")
+PopupMenu/styles/panel = ExtResource("4_42j2s")

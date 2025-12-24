@@ -1,0 +1,437 @@
+[gd_scene load_steps=3 format=3 uid="uid://c85i3fx56v6tu"]
+
+[ext_resource type="Script" uid="uid://cuxwoiwem2eyp" path="res://addons/threeToTwo/scripts/preview_panel.gd" id="1_y5b8b"]
+[ext_resource type="Theme" uid="uid://dnftf4fqghseg" path="res://addons/threeToTwo/scene/tres/theme.tres" id="2_y5b8b"]
+
+[node name="PreviewPanel" type="Control" node_paths=PackedStringArray("previewTexture", "closePreviewButton", "zoomInButton", "zoomOutButton", "resetZoomButton", "zoomLabel", "widthInput", "heightInput", "materialSelector", "previewExportButton", "putongExportButton", "normalExportButton", "exportBothButton", "animationSelector", "frameSlider", "frameInfoLabel", "playPauseButton", "prevFrameButton", "nextFrameButton", "loopCheckBox", "frameIntervalInput", "batchExportButton", "interpolationSelector", "saveFileDialog", "selectDirDialog", "widthLabel", "heightLabel", "interpolationLabel", "materialLabel", "animationLabel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_y5b8b")
+previewTexture = NodePath("PreviewTexture")
+closePreviewButton = NodePath("CloseButton")
+zoomInButton = NodePath("ControlButtons/ZoomInButton")
+zoomOutButton = NodePath("ControlButtons/ZoomOutButton")
+resetZoomButton = NodePath("ControlButtons/ResetZoomButton")
+zoomLabel = NodePath("ControlButtons/ZoomLabel")
+widthInput = NodePath("SizeControls/WidthInput")
+heightInput = NodePath("SizeControls/HeightInput")
+materialSelector = NodePath("MaterialControls/MaterialSelector")
+previewExportButton = NodePath("Export/PreviewExportButton")
+putongExportButton = NodePath("Export/PutongExportButton")
+normalExportButton = NodePath("Export/NormalExportButton")
+exportBothButton = NodePath("Export/ExportBothButton")
+animationSelector = NodePath("AnimationControls/AnimationSelector")
+frameSlider = NodePath("AnimationControls/FrameSlider")
+frameInfoLabel = NodePath("AnimationControls/FrameInfoLabel")
+playPauseButton = NodePath("AnimationControls/PlayPauseButton")
+prevFrameButton = NodePath("AnimationControls/PrevFrameButton")
+nextFrameButton = NodePath("AnimationControls/NextFrameButton")
+loopCheckBox = NodePath("AnimationControls/loopCheckBox")
+frameIntervalInput = NodePath("BatchExportControls/FrameIntervalInput")
+batchExportButton = NodePath("BatchExportControls/BatchExportButton")
+interpolationSelector = NodePath("InterpolationControls/InterpolationSelector")
+saveFileDialog = NodePath("SaveFileDialog")
+selectDirDialog = NodePath("SelectDirDialog")
+widthLabel = NodePath("SizeControls/WidthLabel")
+heightLabel = NodePath("SizeControls/HeightLabel")
+interpolationLabel = NodePath("InterpolationControls/InterpolationLabel")
+materialLabel = NodePath("MaterialControls/MaterialLabel")
+animationLabel = NodePath("AnimationControls/AnimationLabel")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.32156864, 0.32156864, 0.32156864, 0.9490196)
+
+[node name="PreviewTexture" type="TextureRect" parent="."]
+z_index = 1
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="PreviewTexture"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.88235295, 0.88235295, 0.88235295, 1)
+
+[node name="CloseButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -93.0
+offset_top = 35.0
+offset_right = -54.0
+offset_bottom = 74.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 22
+text = "×"
+
+[node name="SizeControls" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="WidthLabel" type="Label" parent="SizeControls"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 38.0
+offset_right = 92.0
+offset_bottom = 69.0
+theme = ExtResource("2_y5b8b")
+text = "宽度"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WidthInput" type="LineEdit" parent="SizeControls"]
+layout_mode = 0
+offset_left = 112.0
+offset_top = 38.0
+offset_right = 195.6875
+offset_bottom = 74.0
+theme = ExtResource("2_y5b8b")
+text = "100"
+alignment = 1
+
+[node name="HeightLabel" type="Label" parent="SizeControls"]
+layout_mode = 0
+offset_left = 214.0
+offset_top = 38.0
+offset_right = 258.0
+offset_bottom = 69.0
+theme = ExtResource("2_y5b8b")
+text = "高度"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HeightInput" type="LineEdit" parent="SizeControls"]
+layout_mode = 0
+offset_left = 284.0
+offset_top = 38.0
+offset_right = 367.6875
+offset_bottom = 74.0
+theme = ExtResource("2_y5b8b")
+text = "100"
+alignment = 1
+
+[node name="InterpolationControls" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="InterpolationLabel" type="Label" parent="InterpolationControls"]
+layout_mode = 0
+offset_left = -161.0
+offset_top = 38.0
+offset_right = -73.0
+offset_bottom = 69.0
+theme = ExtResource("2_y5b8b")
+text = "插值算法"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InterpolationSelector" type="OptionButton" parent="InterpolationControls"]
+layout_mode = 0
+offset_left = -57.0
+offset_top = 38.0
+offset_right = 116.0
+offset_bottom = 74.0
+theme = ExtResource("2_y5b8b")
+text_overrun_behavior = 3
+selected = 0
+item_count = 4
+popup/item_0/text = "Nearest"
+popup/item_0/id = 0
+popup/item_1/text = "Bilinear"
+popup/item_1/id = 1
+popup/item_2/text = "Cubic"
+popup/item_2/id = 2
+popup/item_3/text = "Lanczos"
+popup/item_3/id = 3
+
+[node name="MaterialControls" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="MaterialLabel" type="Label" parent="MaterialControls"]
+layout_mode = 0
+offset_left = -412.0
+offset_top = 38.0
+offset_right = -323.0
+offset_bottom = 69.0
+theme = ExtResource("2_y5b8b")
+text = "材质"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MaterialSelector" type="OptionButton" parent="MaterialControls"]
+layout_mode = 0
+offset_left = -318.0
+offset_top = 38.0
+offset_right = -161.0
+offset_bottom = 74.0
+theme = ExtResource("2_y5b8b")
+text_overrun_behavior = 3
+selected = 0
+item_count = 2
+popup/item_0/text = "普通材质"
+popup/item_0/id = 0
+popup/item_1/text = "法线材质"
+popup/item_1/id = 1
+
+[node name="Export" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="PreviewExportButton" type="Button" parent="Export"]
+layout_mode = 0
+offset_left = -166.0
+offset_top = -158.0
+offset_right = -16.0
+offset_bottom = -113.0
+theme = ExtResource("2_y5b8b")
+text = "导出当前贴图"
+
+[node name="PutongExportButton" type="Button" parent="Export"]
+layout_mode = 0
+offset_left = -166.0
+offset_top = -97.0
+offset_right = -16.0
+offset_bottom = -52.0
+theme = ExtResource("2_y5b8b")
+text = "导出普通贴图"
+
+[node name="NormalExportButton" type="Button" parent="Export"]
+layout_mode = 0
+offset_left = -166.0
+offset_top = -37.0
+offset_right = -16.0
+offset_bottom = 8.0
+theme = ExtResource("2_y5b8b")
+text = "导出法线贴图"
+
+[node name="ExportBothButton" type="Button" parent="Export"]
+layout_mode = 0
+offset_left = -166.0
+offset_top = 22.0
+offset_right = -16.0
+offset_bottom = 67.0
+theme = ExtResource("2_y5b8b")
+text = "导出两种材质"
+
+[node name="AnimationControls" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="AnimationLabel" type="Label" parent="AnimationControls"]
+layout_mode = 0
+offset_left = 47.0
+offset_top = 101.0
+offset_right = 91.0
+offset_bottom = 132.0
+theme = ExtResource("2_y5b8b")
+text = "动画"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationSelector" type="OptionButton" parent="AnimationControls"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 156.0
+offset_top = 101.0
+offset_right = 356.0
+offset_bottom = 137.0
+theme = ExtResource("2_y5b8b")
+text_overrun_behavior = 3
+fit_to_longest_item = false
+
+[node name="FrameInfoLabel" type="Label" parent="AnimationControls"]
+layout_mode = 0
+offset_left = 454.0
+offset_top = 101.0
+offset_right = 557.0
+offset_bottom = 132.0
+theme = ExtResource("2_y5b8b")
+text = "s"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PrevFrameButton" type="Button" parent="AnimationControls"]
+layout_mode = 0
+offset_left = 581.0
+offset_top = 101.0
+offset_right = 607.0
+offset_bottom = 135.0
+theme_override_font_sizes/font_size = 18
+text = "◀"
+
+[node name="PlayPauseButton" type="Button" parent="AnimationControls"]
+layout_mode = 0
+offset_left = 615.0
+offset_top = 101.0
+offset_right = 641.0
+offset_bottom = 135.0
+theme_override_font_sizes/font_size = 18
+text = "▶"
+
+[node name="NextFrameButton" type="Button" parent="AnimationControls"]
+layout_mode = 0
+offset_left = 649.0
+offset_top = 101.0
+offset_right = 693.0
+offset_bottom = 135.0
+theme_override_font_sizes/font_size = 18
+text = "▶▶"
+
+[node name="FrameSlider" type="HSlider" parent="AnimationControls"]
+layout_mode = 0
+offset_left = 709.0
+offset_top = 110.0
+offset_right = 906.0
+offset_bottom = 126.0
+max_value = 1.0
+step = 0.01
+
+[node name="loopCheckBox" type="CheckBox" parent="AnimationControls"]
+layout_mode = 0
+offset_left = 366.0
+offset_top = 101.0
+offset_right = 440.0
+offset_bottom = 135.0
+theme_override_font_sizes/font_size = 18
+text = "循环"
+
+[node name="BatchExportControls" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="FrameIntervalInput" type="LineEdit" parent="BatchExportControls"]
+layout_mode = 0
+offset_left = -172.0
+offset_top = 97.0
+offset_right = -9.0
+offset_bottom = 142.0
+theme = ExtResource("2_y5b8b")
+placeholder_text = "批量导出(秒)"
+alignment = 1
+
+[node name="BatchExportButton" type="Button" parent="BatchExportControls"]
+layout_mode = 0
+offset_left = -166.0
+offset_top = 151.0
+offset_right = -16.0
+offset_bottom = 196.0
+theme = ExtResource("2_y5b8b")
+text = "批量导出"
+
+[node name="ControlButtons" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="ZoomInButton" type="Button" parent="ControlButtons"]
+layout_mode = 0
+offset_left = -146.0
+offset_top = -36.0
+offset_right = -116.0
+offset_bottom = -2.0
+theme_override_font_sizes/font_size = 18
+text = "+"
+
+[node name="ZoomOutButton" type="Button" parent="ControlButtons"]
+layout_mode = 0
+offset_left = -300.0
+offset_top = -36.0
+offset_right = -270.0
+offset_bottom = -2.0
+theme_override_font_sizes/font_size = 18
+text = "-"
+
+[node name="ResetZoomButton" type="Button" parent="ControlButtons"]
+layout_mode = 0
+offset_left = -95.0
+offset_top = -36.0
+offset_right = -18.0
+offset_bottom = -1.0
+theme = ExtResource("2_y5b8b")
+text = "重置"
+
+[node name="ZoomLabel" type="LineEdit" parent="ControlButtons"]
+layout_mode = 0
+offset_left = -259.0
+offset_top = -36.0
+offset_right = -157.0
+theme = ExtResource("2_y5b8b")
+text = "1"
+alignment = 1
+
+[node name="SaveFileDialog" type="FileDialog" parent="."]
+oversampling_override = 1.0
+title = "保存图片"
+initial_position = 2
+access = 2
+filters = PackedStringArray("*.png", "PNG Images")
+use_native_dialog = true
+
+[node name="SelectDirDialog" type="FileDialog" parent="."]

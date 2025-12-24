@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cbd7tedehm3ik"
+
+[deps]
+
+files=["res://addons/threeToTwo/language/translate.zh_CN.translation", "res://addons/threeToTwo/language/translate.en.translation"]
+
+source_file="res://addons/threeToTwo/language/translate.csv"
+dest_files=["res://addons/threeToTwo/language/translate.zh_CN.translation", "res://addons/threeToTwo/language/translate.en.translation"]
+
+[params]
+
+compress=true
+delimiter=0
