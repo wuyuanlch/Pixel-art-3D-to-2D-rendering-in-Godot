@@ -48,5 +48,5 @@ If you encounter any issues or have questions:
 This plugin is provided under the Apache License 2.0. See the LICENSE file for details.
 
 ---
-*Youhua_Uncle*
 *Last updated: December 2025*
+*Youhua_Uncle*
