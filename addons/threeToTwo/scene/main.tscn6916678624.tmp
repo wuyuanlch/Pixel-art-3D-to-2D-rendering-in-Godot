@@ -124,13 +124,12 @@ grow_vertical = 2
 color = Color(0.8819366, 0.8819366, 0.88193655, 1)
 
 [node name="SubViewport" type="SubViewport" parent="."]
-own_world_3d = true
 transparent_bg = true
 
 [node name="Node3D" type="Node3D" parent="SubViewport"]
 
 [node name="Camera3D" type="Camera3D" parent="SubViewport/Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 0, 0.11527778, 2)
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 0, 0.2, 2)
 current = true
 
 [node name="NormalMesh" type="MeshInstance3D" parent="SubViewport/Node3D/Camera3D"]
@@ -161,9 +160,9 @@ grow_vertical = 2
 [node name="yulan" type="Button" parent="Control"]
 layout_mode = 0
 offset_left = 80.0
-offset_top = -208.0
+offset_top = -142.0
 offset_right = 186.0
-offset_bottom = -165.0
+offset_bottom = -99.0
 theme = ExtResource("4_hlbgd")
 text = "预览"
 text_overrun_behavior = 4
@@ -171,9 +170,9 @@ text_overrun_behavior = 4
 [node name="uploadButton" type="Button" parent="Control"]
 layout_mode = 0
 offset_left = 80.0
-offset_top = -39.0
+offset_top = -11.0
 offset_right = 186.0
-offset_bottom = 4.0
+offset_bottom = 32.0
 theme = ExtResource("4_hlbgd")
 text = "上传模型"
 
@@ -205,11 +204,10 @@ text = "语言(Language)"
 [node name="tietuButton" type="Button" parent="Control"]
 layout_mode = 0
 offset_left = 82.0
-offset_top = -125.0
+offset_top = -79.0
 offset_right = 188.0
-offset_bottom = -82.0
+offset_bottom = -36.0
 theme = ExtResource("4_hlbgd")
-disabled = true
 text = "表面贴图"
 
 [node name="worldEnvironment" type="Control" parent="."]
@@ -302,7 +300,7 @@ offset_top = -111.0
 offset_right = -80.3125
 offset_bottom = -75.0
 theme = ExtResource("4_hlbgd")
-text = "0.12"
+text = "0.68"
 placeholder_text = "Y"
 alignment = 1
 

@@ -5,6 +5,7 @@ extends Control
 @export var sprite2D2: TextureRect
 @export var previewButton: Button
 @export var uploadButton: Button  # 上传模型按钮
+@export var tietuButton: Button  # 表面贴图按钮
 @export var modelCon: Node3D
 @export var languageSelector: OptionButton
 
@@ -92,6 +93,7 @@ var was_window_focused: bool = true
 
 # 文件选择对话框
 @export var fileDialog: FileDialog
+@export var tietuDialog: FileDialog
 
 # 箭头键步进值配置（可在编辑器中调整）
 @export var arrowStepNormal: float = 0.1  # 无修饰键时的步进值
@@ -114,6 +116,11 @@ func _ready():
 	# 获取上传按钮并连接信号
 	if uploadButton:
 		uploadButton.pressed.connect(_on_upload_button_pressed)
+	
+	# 获取表面贴图按钮并连接信号，初始禁用
+	if tietuButton:
+		tietuButton.pressed.connect(_on_tietu_button_pressed)
+		tietuButton.disabled = true  # 初始禁用，上传模型后才能使用
 	
 	# 获取语言切换按钮并连接信号
 	if languageSelector:
@@ -720,6 +727,18 @@ func initialize_file_dialog():
 	# 连接文件选择事件
 	fileDialog.file_selected.connect(_on_file_selected)
 	
+	# 初始化表面贴图对话框
+	# if tietuDialog != null:
+	# 	# 设置对话框属性
+	# 	tietuDialog.title = "选择表面贴图图片"
+	# 	tietuDialog.access = FileDialog.ACCESS_FILESYSTEM
+	# 	tietuDialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	# 	tietuDialog.filters = PackedStringArray(["*.png;PNG图片", "*.jpg;JPG图片", "*.jpeg;JPEG图片", "*.bmp;BMP图片", "*.tga;TGA图片"])
+	# 	tietuDialog.size = Vector2i(800, 600)
+		
+	# 连接文件选择事件
+	tietuDialog.file_selected.connect(_on_tietu_file_selected)
+	
 	# 将对话框添加到场景中
 	# add_child(fileDialog)
 	
@@ -824,6 +843,14 @@ func _on_file_selected(file_path: String):
 		_import_model_file(file_path)
 		normalMesh.visible=false
 		previewPanel.materialSelector.select(0)
+	
+	# 注意：current_model_path 现在在 _import_model_file() 和 _load_model_directly() 中设置
+	# 这里不再覆盖，以确保保存的是项目内路径而不是原始外部路径
+	
+	# 启用表面贴图按钮
+	if tietuButton != null:
+		tietuButton.disabled = false
+		print("表面贴图按钮已启用")
 
 
 # 缩放模式按钮切换事件
@@ -1374,6 +1401,10 @@ func _load_model_directly(file_path: String):
 	# 获取绝对路径
 	var absolute_path: String = ProjectSettings.globalize_path(file_path)
 	
+	# 保存当前模型路径（如果是项目内路径）
+	current_model_path = file_path
+	print("保存直接加载模型路径: %s" % current_model_path)
+	
 	# 调用延迟加载方法，直接传递绝对路径
 	call_deferred("_deferred_load_model", absolute_path)
 	
@@ -1412,6 +1443,9 @@ func _import_model_file(source_path: String):
 	if error != OK:
 		return
 	
+	# 保存项目内生成的文件路径到 current_model_path
+	current_model_path = target_path
+	print("保存项目内模型路径: %s" % current_model_path)
 	
 	# 等待一帧让Godot检测到新文件
 	# 使用绝对路径传递给_deferred_load_model
@@ -1814,3 +1848,139 @@ func cleanup():
 	update_animation_ui()
 	update_control_mode_ui()
 	
+	# 禁用表面贴图按钮
+	if tietuButton != null:
+		tietuButton.disabled = true
+	
+
+# ============================================
+# 表面贴图功能
+# ============================================
+
+# 表面贴图按钮点击事件
+func _on_tietu_button_pressed():
+	if modelContainer == null or tietuDialog == null:
+		printerr("ModelContainer或tietuDialog未设置")
+		return
+	
+	# 查找所有MeshInstance3D节点
+	var mesh_instances: Array[MeshInstance3D] = _find_all_mesh_instances(modelContainer)
+	if mesh_instances.size() == 0:
+		printerr("未找到MeshInstance3D节点")
+		return
+	
+	# 保存MeshInstance3D列表和当前索引
+	tietu_mesh_instances = mesh_instances
+	tietu_current_index = 0
+	
+	# 设置对话框的当前目录为当前模型的文件夹（如果有的话）
+	if not current_model_path.is_empty():
+		var model_dir: String = current_model_path.get_base_dir()
+		
+		# 确保目录存在
+		if DirAccess.dir_exists_absolute(model_dir):
+			tietuDialog.current_dir = model_dir
+			print("设置表面贴图对话框目录为项目内路径: %s" % model_dir)
+		else:
+			# 如果项目内目录不存在，尝试使用项目根目录
+			var project_dir: String = ProjectSettings.globalize_path("res://").get_base_dir()
+			if DirAccess.dir_exists_absolute(project_dir):
+				tietuDialog.current_dir = project_dir
+				print("项目内目录不存在，使用项目根目录: %s" % project_dir)
+			else:
+				print("使用默认目录")
+	else:
+		# 如果没有当前模型路径，使用项目根目录
+		var project_dir: String = ProjectSettings.globalize_path("res://").get_base_dir()
+		if DirAccess.dir_exists_absolute(project_dir):
+			tietuDialog.current_dir = project_dir
+			print("没有当前模型路径，使用项目根目录: %s" % project_dir)
+	
+	# 弹出第一个文件选择对话框
+	_show_next_tietu_dialog()
+
+# 表面贴图文件选择事件
+func _on_tietu_file_selected(file_path: String):
+	if file_path.is_empty():
+		printerr("文件路径为空")
+		_reset_tietu_state()
+		return
+	
+	if tietu_mesh_instances.is_empty() or tietu_current_index >= tietu_mesh_instances.size():
+		printerr("MeshInstance3D列表无效或索引越界")
+		_reset_tietu_state()
+		return
+	
+	# 获取当前处理的MeshInstance3D
+	var current_mesh_instance: MeshInstance3D = tietu_mesh_instances[tietu_current_index]
+	
+	# 加载图片纹理
+	var texture: Texture2D = load(file_path)
+	if texture == null:
+		printerr("无法加载图片: %s" % file_path)
+		# 继续处理下一个
+		tietu_current_index += 1
+		_show_next_tietu_dialog()
+		return
+	
+	# 应用到MeshInstance3D的material overlay
+	_apply_texture_to_mesh_instance(current_mesh_instance, texture)
+	
+	# 处理下一个MeshInstance3D
+	tietu_current_index += 1
+	_show_next_tietu_dialog()
+
+# 显示下一个表面贴图对话框
+func _show_next_tietu_dialog():
+	if tietu_current_index >= tietu_mesh_instances.size():
+		# 所有MeshInstance3D都已处理完毕
+		print("表面贴图应用完成，共处理了 %d 个MeshInstance3D" % tietu_mesh_instances.size())
+		_reset_tietu_state()
+		return
+	
+	# 弹出文件选择对话框
+	tietuDialog.popup_centered()
+
+# 重置表面贴图状态
+func _reset_tietu_state():
+	tietu_mesh_instances.clear()
+	tietu_current_index = 0
+
+# 查找所有CollisionObject3D节点
+func _find_all_collision_objects(node: Node) -> Array[CollisionObject3D]:
+	var collision_objects: Array[CollisionObject3D] = []
+	
+	if node is CollisionObject3D:
+		collision_objects.append(node)
+	
+	# 递归查找子节点
+	for child in node.get_children():
+		collision_objects.append_array(_find_all_collision_objects(child))
+	
+	return collision_objects
+
+# 将纹理应用到MeshInstance3D的material overlay
+func _apply_texture_to_mesh_instance(mesh_instance: MeshInstance3D, texture: Texture2D):
+	if mesh_instance == null:
+		printerr("MeshInstance3D为空")
+		return
+	
+	var material: Material = mesh_instance.get_surface_override_material(0)
+	
+	if material == null:
+		# 如果没有材质，创建一个新的StandardMaterial3D
+		material = StandardMaterial3D.new()
+		mesh_instance.set_surface_override_material(0, material)
+	
+	# 设置材质的albedo_texture
+	if material is StandardMaterial3D:
+		var std_material: StandardMaterial3D = material as StandardMaterial3D
+		std_material.albedo_texture = texture
+		print("已将纹理应用到MeshInstance3D: %s" % mesh_instance.name)
+	else:
+		printerr("MeshInstance3D的材质不是StandardMaterial3D类型，无法设置纹理")
+
+# 表面贴图相关变量
+var tietu_mesh_instances: Array[MeshInstance3D] = []
+var tietu_current_index: int = 0
+var current_model_path: String = ""  # 当前模型文件的路径
