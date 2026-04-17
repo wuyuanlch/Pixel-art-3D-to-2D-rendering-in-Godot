@@ -2,6 +2,9 @@
 
 [ext_resource type="Shader" uid="uid://diops5i7lvik8" path="res://addons/threeToTwo/shader/normal.gdshader" id="1_lbasl"]
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_lbasl"]
+viewport_path = NodePath("SubViewport")
+
 [sub_resource type="QuadMesh" id="QuadMesh_skyfl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_uli13"]
@@ -150,6 +153,7 @@ offset_left = -256.0
 offset_right = 256.0
 offset_bottom = 512.0
 grow_horizontal = 2
+texture = SubResource("ViewportTexture_lbasl")
 
 [node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/Control/RealTimeTexture" unique_id=1129275662]
 show_behind_parent = true

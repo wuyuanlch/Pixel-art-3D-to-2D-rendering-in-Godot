@@ -3,7 +3,7 @@ extends EditorPlugin
 class_name threeToTwo
 
 # 使用您已经创建好的场景作为右侧停靠面板和弹出窗口
-var main_panel_scene: PackedScene
+var main_panel_scene =preload("res://addons/threeToTwo/scence/main.tscn")
 var preview_panel_scene: PackedScene
 var main_window: Window
 var main_panel_instance: Control
@@ -78,7 +78,6 @@ var file_dialog: FileDialog = null
 
 func _enter_tree() -> void:
 	# 在这里动态加载
-	main_panel_scene = load("res://addons/threeToTwo/scence/main.tscn")
 	preview_panel_scene = load("res://addons/threeToTwo/scence/preview_panel.tscn")
 	vfx_preview_panel_scene = load("res://addons/threeToTwo/scence/vfx_preview_panel.tscn")
 	animation_player_entry_scene = load("res://addons/threeToTwo/scence/animation_player_entry.tscn")
@@ -255,8 +254,11 @@ func _setup_scene_nodes(scene_instance: Control) -> void:
 		self.texture_rect = texture_rect_node
 		#print("找到 RealTimeTexture 节点")
 		
-		# 使用 call_deferred 确保在场景树完全建立后执行
-		call_deferred("_setup_viewport_texture", texture_rect_node, scene_instance)
+		# 保存原始的 ViewportTexture
+		var current_texture = texture_rect_node.texture
+		if current_texture is ViewportTexture:
+			self.original_viewport_texture = current_texture
+			#print("保存原始 ViewportTexture")
 	
 	# 查找 SubViewport 中的相机节点
 	
@@ -317,28 +319,6 @@ func _setup_scene_nodes(scene_instance: Control) -> void:
 	if dock_panel_instance:
 		dock_panel_instance.gui_input.connect(_on_plugin_panel_gui_input)
 		#print("已连接插件面板鼠标点击检测信号")
-
-
-func _setup_viewport_texture(texture_rect: TextureRect, scene_instance: Control):
-	# 动态创建 ViewportTexture
-		var viewport_texture = ViewportTexture.new()
-		var subviewport_node = scene_instance.find_child("SubViewport", true, false)
-		# 查找 SubViewport 节点
-		if subviewport_node is SubViewport:
-			# 设置 viewport_path
-			viewport_texture.viewport_path = subviewport_node.get_path()
-			
-			# 应用到 TextureRect
-			texture_rect.texture = viewport_texture
-			
-			# 保存引用（如果需要）
-			self.original_viewport_texture = viewport_texture
-
-		# 保存原始的 ViewportTexture
-		# var current_texture = texture_rect_node.texture
-		# if current_texture is ViewportTexture:
-		# 	self.original_viewport_texture = current_texture
-		# 	#print("保存原始 ViewportTexture")
 
 # 连接按钮信号
 func _connect_button_signals(scene_instance: Control) -> void:
