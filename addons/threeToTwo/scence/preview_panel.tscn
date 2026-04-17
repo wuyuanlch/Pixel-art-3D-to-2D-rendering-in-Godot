@@ -1,0 +1,416 @@
+[gd_scene format=3 uid="uid://ducghyui4ow76"]
+
+[ext_resource type="Script" uid="uid://bpy0myvgskbtr" path="res://addons/threeToTwo/scripts/preview_panel.gd" id="1_j0wd0"]
+
+[node name="PreviewPanel" type="Control" unique_id=799404303 node_paths=PackedStringArray("previewTexture", "closePreviewButton", "zoomInButton", "zoomOutButton", "resetZoomButton", "zoomLabel", "widthInput", "heightInput", "materialSelector", "previewExportButton", "putongExportButton", "normalExportButton", "exportBothButton", "frameSlider", "frameInfoLabel", "playPauseButton", "prevFrameButton", "nextFrameButton", "frameIntervalInput", "batchExportButton", "interpolationSelector", "saveFileDialog", "selectDirDialog", "widthLabel", "heightLabel", "interpolationLabel", "materialLabel", "animationLabel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_j0wd0")
+previewTexture = NodePath("PreviewTexture")
+closePreviewButton = NodePath("CloseButton")
+zoomInButton = NodePath("ControlButtons/ZoomInButton")
+zoomOutButton = NodePath("ControlButtons/ZoomOutButton")
+resetZoomButton = NodePath("ControlButtons/ResetZoomButton")
+zoomLabel = NodePath("ControlButtons/ZoomLabel")
+widthInput = NodePath("SizeControls/WidthInput")
+heightInput = NodePath("SizeControls/HeightInput")
+materialSelector = NodePath("MaterialControls/MaterialSelector")
+previewExportButton = NodePath("Export/PreviewExportButton")
+putongExportButton = NodePath("Export/PutongExportButton")
+normalExportButton = NodePath("Export/NormalExportButton")
+exportBothButton = NodePath("Export/ExportBothButton")
+frameSlider = NodePath("AnimationControls/FrameSlider")
+frameInfoLabel = NodePath("AnimationControls/FrameInfoLabel")
+playPauseButton = NodePath("AnimationControls/PlayPauseButton")
+prevFrameButton = NodePath("AnimationControls/PrevFrameButton")
+nextFrameButton = NodePath("AnimationControls/NextFrameButton")
+frameIntervalInput = NodePath("BatchExportControls/FrameIntervalInput")
+batchExportButton = NodePath("BatchExportControls/BatchExportButton")
+interpolationSelector = NodePath("InterpolationControls/InterpolationSelector")
+saveFileDialog = NodePath("SaveFileDialog")
+selectDirDialog = NodePath("SelectDirDialog")
+widthLabel = NodePath("SizeControls/WidthLabel")
+heightLabel = NodePath("SizeControls/HeightLabel")
+interpolationLabel = NodePath("InterpolationControls/InterpolationLabel")
+materialLabel = NodePath("MaterialControls/MaterialLabel")
+animationLabel = NodePath("AnimationControls/AnimationLabel")
+
+[node name="Background" type="ColorRect" parent="." unique_id=191621531]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.32156864, 0.32156864, 0.32156864, 0.9490196)
+
+[node name="PreviewTexture" type="TextureRect" parent="." unique_id=2139019787]
+z_index = 1
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+
+[node name="ColorRect" type="ColorRect" parent="PreviewTexture" unique_id=489063903]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.88235295, 0.88235295, 0.88235295, 1)
+
+[node name="CloseButton" type="Button" parent="." unique_id=442250697]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -93.0
+offset_top = 35.0
+offset_right = -54.0
+offset_bottom = 74.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 22
+text = "×"
+
+[node name="SizeControls" type="Control" parent="." unique_id=1221097539]
+layout_mode = 1
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="WidthLabel" type="Label" parent="SizeControls" unique_id=2084888198]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 38.0
+offset_right = 92.0
+offset_bottom = 69.0
+text = "宽度(Width)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WidthInput" type="LineEdit" parent="SizeControls" unique_id=1988893897]
+layout_mode = 0
+offset_left = 159.0
+offset_top = 38.0
+offset_right = 242.6875
+offset_bottom = 74.0
+text = "100"
+alignment = 1
+
+[node name="HeightLabel" type="Label" parent="SizeControls" unique_id=221262434]
+layout_mode = 0
+offset_left = 267.0
+offset_top = 38.0
+offset_right = 361.0
+offset_bottom = 69.0
+text = "高度(Height)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HeightInput" type="LineEdit" parent="SizeControls" unique_id=1710854767]
+layout_mode = 0
+offset_left = 383.0
+offset_top = 38.0
+offset_right = 466.6875
+offset_bottom = 74.0
+text = "100"
+alignment = 1
+
+[node name="InterpolationControls" type="Control" parent="." unique_id=1808083219]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="InterpolationLabel" type="Label" parent="InterpolationControls" unique_id=1832394891]
+layout_mode = 0
+offset_left = -512.0
+offset_top = 167.0
+offset_right = -320.0
+offset_bottom = 216.0
+text = "插值算法
+(Interpolation algorithm)"
+vertical_alignment = 1
+
+[node name="InterpolationSelector" type="OptionButton" parent="InterpolationControls" unique_id=1115502095]
+layout_mode = 0
+offset_left = -513.0
+offset_top = 224.0
+offset_right = -323.0
+offset_bottom = 260.0
+text_overrun_behavior = 3
+selected = 0
+item_count = 5
+popup/item_0/text = "Nearest"
+popup/item_0/id = 0
+popup/item_1/text = "Bilinear"
+popup/item_1/id = 1
+popup/item_2/text = "Cubic"
+popup/item_2/id = 2
+popup/item_3/text = "Lanczos"
+popup/item_3/id = 3
+popup/item_4/text = "Nearest+Sharp"
+popup/item_4/id = 4
+
+[node name="MaterialControls" type="Control" parent="." unique_id=2024559454]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="MaterialLabel" type="Label" parent="MaterialControls" unique_id=1468557875]
+layout_mode = 0
+offset_left = -1067.0
+offset_top = 281.0
+offset_right = -960.0
+offset_bottom = 312.0
+text = "材质(Material)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MaterialSelector" type="OptionButton" parent="MaterialControls" unique_id=1441829725]
+layout_mode = 0
+offset_left = -1068.0
+offset_top = 331.0
+offset_right = -878.0
+offset_bottom = 367.0
+text_overrun_behavior = 3
+selected = 0
+item_count = 2
+popup/item_0/text = "普通材质(Ordinary)"
+popup/item_0/id = 0
+popup/item_1/text = "法线材质(Normal)"
+popup/item_1/id = 1
+
+[node name="Export" type="Control" parent="." unique_id=1933126707]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="PreviewExportButton" type="Button" parent="Export" unique_id=277387100]
+layout_mode = 0
+offset_left = -168.0
+offset_top = -172.0
+offset_right = 2.0
+offset_bottom = -119.0
+text = "导出当前贴图
+(Export current)"
+
+[node name="PutongExportButton" type="Button" parent="Export" unique_id=405762170]
+layout_mode = 0
+offset_left = -168.0
+offset_top = -104.0
+offset_right = 2.0
+offset_bottom = -51.0
+text = "导出普通贴图
+(Export Regular)"
+
+[node name="NormalExportButton" type="Button" parent="Export" unique_id=1848620140]
+layout_mode = 0
+offset_left = -168.0
+offset_top = -37.0
+offset_right = 2.0
+offset_bottom = 16.0
+text = "导出法线贴图
+(Export Normal)"
+
+[node name="ExportBothButton" type="Button" parent="Export" unique_id=659021962]
+layout_mode = 0
+offset_left = -168.0
+offset_top = 31.0
+offset_right = 2.0
+offset_bottom = 84.0
+text = "导出两种材质
+(Export two types)"
+
+[node name="AnimationControls" type="Control" parent="." unique_id=2051479407]
+layout_mode = 1
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="AnimationLabel" type="Label" parent="AnimationControls" unique_id=1135368746]
+layout_mode = 0
+offset_left = 47.0
+offset_top = 94.0
+offset_right = 138.0
+offset_bottom = 143.0
+text = "动画
+(Animation)"
+vertical_alignment = 1
+
+[node name="AnimationSelector" type="OptionButton" parent="AnimationControls" unique_id=349949940]
+visible = false
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 145.0
+offset_top = 101.0
+offset_right = 345.0
+offset_bottom = 137.0
+text_overrun_behavior = 3
+fit_to_longest_item = false
+
+[node name="FrameInfoLabel" type="Label" parent="AnimationControls" unique_id=1696031580]
+layout_mode = 0
+offset_left = 556.0
+offset_top = 101.0
+offset_right = 659.0
+offset_bottom = 132.0
+text = "s"
+vertical_alignment = 1
+
+[node name="PrevFrameButton" type="Button" parent="AnimationControls" unique_id=515170847]
+layout_mode = 0
+offset_left = 162.0
+offset_top = 101.0
+offset_right = 202.0
+offset_bottom = 141.0
+text = "◀"
+
+[node name="PlayPauseButton" type="Button" parent="AnimationControls" unique_id=1169472304]
+layout_mode = 0
+offset_left = 217.0
+offset_top = 101.0
+offset_right = 257.0
+offset_bottom = 141.0
+text = "▶"
+
+[node name="NextFrameButton" type="Button" parent="AnimationControls" unique_id=643731385]
+layout_mode = 0
+offset_left = 271.0
+offset_top = 101.0
+offset_right = 311.0
+offset_bottom = 141.0
+text = "▶▶"
+
+[node name="FrameSlider" type="HSlider" parent="AnimationControls" unique_id=139188263]
+layout_mode = 0
+offset_left = 335.0
+offset_top = 112.0
+offset_right = 532.0
+offset_bottom = 128.0
+max_value = 1.0
+step = 0.01
+
+[node name="BatchExportControls" type="Control" parent="." unique_id=268256903]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="FrameIntervalInput" type="LineEdit" parent="BatchExportControls" unique_id=1829688322]
+layout_mode = 0
+offset_left = -169.0
+offset_top = 165.0
+offset_right = 1.0
+offset_bottom = 210.0
+placeholder_text = "(s)"
+alignment = 1
+
+[node name="BatchExportButton" type="Button" parent="BatchExportControls" unique_id=1426899635]
+layout_mode = 0
+offset_left = -168.0
+offset_top = 98.0
+offset_right = 2.0
+offset_bottom = 152.0
+text = "批量导出
+(Batch Export)"
+
+[node name="ControlButtons" type="Control" parent="." unique_id=571221720]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="ZoomInButton" type="Button" parent="ControlButtons" unique_id=1793478363]
+layout_mode = 0
+offset_left = -150.0
+offset_top = -36.0
+offset_right = -120.0
+offset_bottom = -2.0
+text = "+"
+
+[node name="ZoomOutButton" type="Button" parent="ControlButtons" unique_id=608295297]
+layout_mode = 0
+offset_left = -313.0
+offset_top = -36.0
+offset_right = -283.0
+offset_bottom = -2.0
+text = "-"
+
+[node name="ResetZoomButton" type="Button" parent="ControlButtons" unique_id=273637225]
+layout_mode = 0
+offset_left = -101.0
+offset_top = -36.0
+offset_right = -24.0
+offset_bottom = -1.0
+text = "重置(Reset)"
+
+[node name="ZoomLabel" type="LineEdit" parent="ControlButtons" unique_id=1909350475]
+layout_mode = 0
+offset_left = -267.0
+offset_top = -38.0
+offset_right = -165.0
+offset_bottom = 2.0
+text = "1"
+alignment = 1
+
+[node name="SaveFileDialog" type="FileDialog" parent="." unique_id=1506567628]
+oversampling_override = 1.0
+title = "保存图片"
+initial_position = 2
+access = 2
+filters = PackedStringArray("*.png", "PNG Images")
+use_native_dialog = true
+
+[node name="SelectDirDialog" type="FileDialog" parent="." unique_id=894091793]
+oversampling_override = 1.0
+title = "保存文件夹"
+initial_position = 2
+access = 2
+use_native_dialog = true

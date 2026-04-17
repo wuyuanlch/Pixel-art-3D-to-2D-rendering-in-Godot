@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://b81agmdlwk8p0"]
+
+[node name="AnimationPlayerEntry" type="HBoxContainer" unique_id=283559125]
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="PlayerNameLabel" type="Label" parent="." unique_id=690618513]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "AnimationPlayer"
+
+[node name="AnimationOptionButton" type="OptionButton" parent="." unique_id=1725702181]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="PlayButton" type="Button" parent="." unique_id=889624332]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "▶"
+
+[node name="SelectCheckButton" type="CheckButton" parent="." unique_id=1598403109]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+button_pressed = true
+text = "选择(Selected)"
+
+[node name="LoopCheckButton" type="CheckButton" parent="." unique_id=1598403110]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "循环(Cycle)"
+
+[node name="RemoveButton" type="Button" parent="." unique_id=1598403108]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "X"

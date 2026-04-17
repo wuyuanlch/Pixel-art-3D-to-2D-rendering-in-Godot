@@ -1,0 +1,196 @@
+[gd_scene format=3 uid="uid://31mmqb8jdcsy"]
+
+[ext_resource type="Shader" uid="uid://diops5i7lvik8" path="res://addons/threeToTwo/shader/normal.gdshader" id="1_lbasl"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_skyfl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uli13"]
+render_priority = 0
+shader = ExtResource("1_lbasl")
+
+[sub_resource type="QuadMesh" id="QuadMesh_wnru8"]
+
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_gthmd"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Environment" id="Environment_4ou6e"]
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+
+[node name="main" type="Control" unique_id=1616179646]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1655966162]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=1257172831]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=853183124]
+layout_mode = 2
+
+[node name="CameraLabel" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer2" unique_id=2143357465]
+layout_mode = 2
+text = "camera"
+
+[node name="Button" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer2" unique_id=391290687]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "相机选中(Selected)"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=1720348134]
+layout_mode = 2
+
+[node name="CheckButton" type="CheckButton" parent="ScrollContainer/VBoxContainer/HBoxContainer" unique_id=981314397]
+layout_mode = 2
+text = "实时相机(Real-time camera)"
+
+[node name="ScenceCheckButton" type="CheckButton" parent="ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1873871245]
+layout_mode = 2
+text = "场景相机(Scene Camera)"
+
+[node name="LoadingButton" type="Button" parent="ScrollContainer/VBoxContainer" unique_id=795807881]
+layout_mode = 2
+text = "加载相机位置和长度高度(Load camera position and length height)"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=327838677]
+layout_mode = 2
+
+[node name="ModelContainerLabel" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer3" unique_id=1760221824]
+layout_mode = 2
+text = "ModelContainer"
+
+[node name="Button" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer3" unique_id=376839099]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "ModelContainer选中(Selected)"
+
+[node name="Button2" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer3" unique_id=852603004]
+layout_mode = 2
+text = "上传模型(Upload Model)"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=1637436639]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/VBoxContainer3" unique_id=2001549935]
+layout_mode = 2
+
+[node name="AnimationPlayerLabel" type="Label" parent="ScrollContainer/VBoxContainer/VBoxContainer3/HBoxContainer" unique_id=1760221825]
+layout_mode = 2
+text = "AnimationPlayer管理器(Manager)"
+
+[node name="Button4" type="Button" parent="ScrollContainer/VBoxContainer/VBoxContainer3/HBoxContainer" unique_id=376839100]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "选中动画(Selected AnimationPlayer)"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ScrollContainer/VBoxContainer/VBoxContainer3" unique_id=1257172832]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="AnimationPlayerList" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VBoxContainer3/ScrollContainer" unique_id=596667917]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/VBoxContainer3" unique_id=686423775]
+layout_mode = 2
+
+[node name="Button5" type="Button" parent="ScrollContainer/VBoxContainer/VBoxContainer3/HBoxContainer2" unique_id=391290688]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "播放所有▶"
+
+[node name="Button6" type="Button" parent="ScrollContainer/VBoxContainer/VBoxContainer3/HBoxContainer2" unique_id=391290689]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "暂停所有⏸"
+
+[node name="Button7" type="Button" parent="ScrollContainer/VBoxContainer/VBoxContainer3/HBoxContainer2" unique_id=391290690]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "停止所有(stop)"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=2010661960]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer4" unique_id=620060071]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "图片和动画导出(Image and Animation Export)"
+
+[node name="VFXButton" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer4" unique_id=1819869085]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "特效导出(Special Effects Export)"
+
+[node name="Control" type="Control" parent="ScrollContainer/VBoxContainer" unique_id=1548590427]
+layout_mode = 2
+size_flags_vertical = 2
+
+[node name="RealTimeTexture" type="TextureRect" parent="ScrollContainer/VBoxContainer/Control" unique_id=331005170]
+custom_minimum_size = Vector2(512, 512)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -256.0
+offset_right = 256.0
+offset_bottom = 512.0
+grow_horizontal = 2
+
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/Control/RealTimeTexture" unique_id=1129275662]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=423536041]
+transparent_bg = true
+canvas_item_default_texture_filter = 0
+render_target_update_mode = 4
+
+[node name="Node3D" type="Node3D" parent="SubViewport" unique_id=1558713979]
+
+[node name="Camera" type="Camera3D" parent="SubViewport/Node3D" unique_id=1575883031]
+transform = Transform3D(0.99680173, -0.008244052, 0.0794883, 0.01673796, 0.9941406, -0.10679159, -0.078142144, 0.10778053, 0.991099, 0.37701726, 0.063247085, 3.4882133)
+current = true
+
+[node name="NormalMesh" type="MeshInstance3D" parent="SubViewport/Node3D/Camera" unique_id=1415555572]
+transform = Transform3D(1000, 0, 0, 0, 1000, 0, 0, 0, 1000, 0, -1.2, -61.435257)
+visible = false
+mesh = SubResource("QuadMesh_skyfl")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_uli13")
+
+[node name="VFXMesh" type="MeshInstance3D" parent="SubViewport/Node3D/Camera" unique_id=149879272]
+transform = Transform3D(1000, 0, 0, 0, 1000, 0, 0, 0, 1000, 0, -1.2, -61.435257)
+visible = false
+mesh = SubResource("QuadMesh_wnru8")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ORMMaterial3D_gthmd")
+
+[node name="ModelContainer" type="Node3D" parent="SubViewport/Node3D" unique_id=1968067768]
+
+[node name="SpecialEffectsContainer" type="Node3D" parent="SubViewport/Node3D" unique_id=714198400]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewport/Node3D" unique_id=1027284349]
+visible = false
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewport/Node3D" unique_id=242980894]
+environment = SubResource("Environment_4ou6e")
