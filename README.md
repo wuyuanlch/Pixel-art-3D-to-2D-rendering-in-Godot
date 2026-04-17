@@ -495,6 +495,16 @@ Camera configurations can be saved via code, including:
 3. Whether there's sufficient memory
 4. Try reducing the caching time interval
 
+### Q9: Error "ERROR: Path to node is invalid: 'SubViewport'." appears during installation?
+**A:** Possible causes and solutions:
+1. The cause is currently unknown, but the plugin still works properly. You can ignore this error for now
+
+### Q9: Errors appear after restarting with the model?
+**A:** Possible causes and solutions:
+1. There may be an issue with the "Upload Model" button method that prevents proper removal of node instantiation. The solution is currently unknown
+2. It is recommended to manually drag and drop the model into the node and convert it to local yourself
+3. Alternatively, after clicking "Upload Model", click the option to convert to local
+
 ## Architecture Upgrade Explanation
 
 ### Main Differences from Previous Version
