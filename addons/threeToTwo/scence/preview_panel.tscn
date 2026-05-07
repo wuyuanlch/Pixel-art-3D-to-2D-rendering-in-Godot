@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bpy0myvgskbtr" path="res://addons/threeToTwo/scripts/preview_panel.gd" id="1_j0wd0"]
 
-[node name="PreviewPanel" type="Control" unique_id=799404303 node_paths=PackedStringArray("previewTexture", "closePreviewButton", "zoomInButton", "zoomOutButton", "resetZoomButton", "zoomLabel", "widthInput", "heightInput", "materialSelector", "previewExportButton", "putongExportButton", "normalExportButton", "exportBothButton", "frameSlider", "frameInfoLabel", "playPauseButton", "prevFrameButton", "nextFrameButton", "frameIntervalInput", "batchExportButton", "interpolationSelector", "saveFileDialog", "selectDirDialog", "widthLabel", "heightLabel", "interpolationLabel", "materialLabel", "animationLabel")]
+[node name="PreviewPanel" type="Control" unique_id=799404303 node_paths=PackedStringArray("previewTexture", "closePreviewButton", "zoomInButton", "zoomOutButton", "resetZoomButton", "zoomLabel", "widthInput", "heightInput", "lockCheckBox", "materialSelector", "previewExportButton", "putongExportButton", "normalExportButton", "exportBothButton", "frameSlider", "frameInfoLabel", "playPauseButton", "prevFrameButton", "nextFrameButton", "frameIntervalInput", "batchExportButton", "interpolationSelector", "saveFileDialog", "selectDirDialog", "widthLabel", "heightLabel", "interpolationLabel", "materialLabel", "animationLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,6 +18,7 @@ resetZoomButton = NodePath("ControlButtons/ResetZoomButton")
 zoomLabel = NodePath("ControlButtons/ZoomLabel")
 widthInput = NodePath("SizeControls/WidthInput")
 heightInput = NodePath("SizeControls/HeightInput")
+lockCheckBox = NodePath("SizeControls/LockCheckBox")
 materialSelector = NodePath("MaterialControls/MaterialSelector")
 previewExportButton = NodePath("Export/PreviewExportButton")
 putongExportButton = NodePath("Export/PutongExportButton")
@@ -89,49 +90,40 @@ grow_horizontal = 0
 theme_override_font_sizes/font_size = 22
 text = "×"
 
-[node name="SizeControls" type="Control" parent="." unique_id=1221097539]
+[node name="SizeControls" type="HBoxContainer" parent="." unique_id=681656637]
 layout_mode = 1
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 49.0
+offset_top = 37.0
+offset_right = 428.0
+offset_bottom = 77.0
+theme_override_constants/separation = 20
 
 [node name="WidthLabel" type="Label" parent="SizeControls" unique_id=2084888198]
-layout_mode = 0
-offset_left = 48.0
-offset_top = 38.0
-offset_right = 92.0
-offset_bottom = 69.0
+layout_mode = 2
 text = "宽度(Width)"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="WidthInput" type="LineEdit" parent="SizeControls" unique_id=1988893897]
-layout_mode = 0
-offset_left = 159.0
-offset_top = 38.0
-offset_right = 242.6875
-offset_bottom = 74.0
+layout_mode = 2
 text = "100"
 alignment = 1
 
 [node name="HeightLabel" type="Label" parent="SizeControls" unique_id=221262434]
-layout_mode = 0
-offset_left = 267.0
-offset_top = 38.0
-offset_right = 361.0
-offset_bottom = 69.0
+layout_mode = 2
 text = "高度(Height)"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="HeightInput" type="LineEdit" parent="SizeControls" unique_id=1710854767]
-layout_mode = 0
-offset_left = 383.0
-offset_top = 38.0
-offset_right = 466.6875
-offset_bottom = 74.0
+layout_mode = 2
 text = "100"
 alignment = 1
+
+[node name="LockCheckBox" type="CheckBox" parent="SizeControls" unique_id=2143255191]
+layout_mode = 2
+button_pressed = true
+text = "锁定(Lock)"
 
 [node name="InterpolationControls" type="Control" parent="." unique_id=1808083219]
 layout_mode = 1

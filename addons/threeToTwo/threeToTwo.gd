@@ -3,7 +3,7 @@ extends EditorPlugin
 class_name threeToTwo
 
 # 使用您已经创建好的场景作为右侧停靠面板和弹出窗口
-var main_panel_scene =preload("res://addons/threeToTwo/scence/main.tscn")
+var main_panel_scene= preload("res://addons/threeToTwo/scence/main.tscn")
 var preview_panel_scene: PackedScene
 var main_window: Window
 var main_panel_instance: Control
@@ -59,7 +59,7 @@ var current_cache_time: float = 0.0
 var current_play_index: int = 0
 
 # UI 引用
-var vfx_button: Button  # VBoxContainer/VFXButton
+var vfx_button: Button  # VBoxContainer/VFXExportButton
 var vfx_mesh_node: MeshInstance3D  # SubViewport/Node3D/Camera/VFXMesh 节点
 
 # VFX 预览面板相关变量
@@ -69,15 +69,25 @@ var vfx_preview_window: Window
 
 var loading_button: Button  # LoadingButton 节点引用
 
+# 尺寸输入框引用
+var width_input_line_edit: LineEdit  # 宽度输入框
+var height_input_line_edit: LineEdit  # 高度输入框
+var texture_container: ScrollContainer  # 包裹 RealTimeTexture 的 ScrollContainer 节点
+
 # 加载的导出尺寸（用于预览面板初始化）
 var loaded_export_width: float = 0.0  # 保存加载的宽度（浮点数）
 var loaded_export_height: float = 0.0  # 保存加载的高度（浮点数）
+
+# 加载的预览面板尺寸（用于预览面板初始化）
+var loaded_preview_panel_width: float = 0.0  # 保存加载的预览面板宽度
+var loaded_preview_panel_height: float = 0.0  # 保存加载的预览面板高度
 
 # 文件对话框（用于上传模型）
 var file_dialog: FileDialog = null
 
 func _enter_tree() -> void:
 	# 在这里动态加载
+	
 	preview_panel_scene = load("res://addons/threeToTwo/scence/preview_panel.tscn")
 	vfx_preview_panel_scene = load("res://addons/threeToTwo/scence/vfx_preview_panel.tscn")
 	animation_player_entry_scene = load("res://addons/threeToTwo/scence/animation_player_entry.tscn")
@@ -159,28 +169,31 @@ func _process(delta: float) -> void:
 		if scene_camera != null:
 			# 同步选中的相机到场景相机的位置和旋转
 			selected_camera_node.global_transform = scene_camera.global_transform
-			# 同步相机属性
-			# selected_camera_node.fov = scene_camera.fov
-			# selected_camera_node.near = scene_camera.near
-			# selected_camera_node.far = scene_camera.far
-			# selected_camera_node.projection = scene_camera.projection
+			# 同步相机属性（包括投影模式、正交size等，确保正交缩放等操作实时生效）
+			selected_camera_node.projection = scene_camera.projection
+			selected_camera_node.size = scene_camera.size
+			selected_camera_node.fov = scene_camera.fov
+			selected_camera_node.near = scene_camera.near
+			selected_camera_node.far = scene_camera.far
 			
 			# 在场景相机跟随模式下，总是更新 SubViewport 相机
 			# 这样用户可以在实时预览中看到跟随效果
-			if is_instance_valid(subviewport_camera):
-				subviewport_camera.global_transform = selected_camera_node.global_transform
-				# subviewport_camera.fov = selected_camera_node.fov
-				# subviewport_camera.near = selected_camera_node.near
-				# subviewport_camera.far = selected_camera_node.far
-				# subviewport_camera.projection = selected_camera_node.projection
-				
-				# 强制 SubViewport 更新
-				if is_instance_valid(texture_rect) and texture_rect.texture is ViewportTexture:
-					# 获取 SubViewport
-					var subviewport = subviewport_camera.get_parent().get_parent()
-					if subviewport is SubViewport:
-						# 强制更新一次
-						subviewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+		if is_instance_valid(subviewport_camera):
+			subviewport_camera.global_transform = selected_camera_node.global_transform
+			# 同步相机投影模式和相关属性
+			subviewport_camera.projection = selected_camera_node.projection
+			subviewport_camera.size = selected_camera_node.size
+			subviewport_camera.fov = selected_camera_node.fov
+			subviewport_camera.near = selected_camera_node.near
+			subviewport_camera.far = selected_camera_node.far
+			
+			# 强制 SubViewport 持续更新
+			if is_instance_valid(texture_rect) and texture_rect.texture is ViewportTexture:
+				# 获取 SubViewport
+				var subviewport = subviewport_camera.get_parent().get_parent()
+				if subviewport is SubViewport:
+					# 设置为持续更新模式，确保画面实时跟随
+					subviewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 		else:
 			# 编辑器相机未获取到，尝试强制刷新缓存
 			editor_camera = null
@@ -204,11 +217,12 @@ func _process(delta: float) -> void:
 			# 同步全局变换
 			subviewport_camera.global_transform = selected_camera_node.global_transform
 			
-			# 同步相机属性（用不到，后续可以自行取消注释）
-			# subviewport_camera.fov = selected_camera_node.fov
-			# subviewport_camera.near = selected_camera_node.near
-			# subviewport_camera.far = selected_camera_node.far
-			# subviewport_camera.projection = selected_camera_node.projection
+			# 同步相机投影模式和相关属性
+			subviewport_camera.projection = selected_camera_node.projection
+			subviewport_camera.size = selected_camera_node.size
+			subviewport_camera.fov = selected_camera_node.fov
+			subviewport_camera.near = selected_camera_node.near
+			subviewport_camera.far = selected_camera_node.far
 			
 			# 强制 SubViewport 更新（如果需要）
 			if is_instance_valid(texture_rect) and texture_rect.texture is ViewportTexture:
@@ -259,7 +273,7 @@ func _setup_scene_nodes(scene_instance: Control) -> void:
 		if current_texture is ViewportTexture:
 			self.original_viewport_texture = current_texture
 			#print("保存原始 ViewportTexture")
-	
+		
 	# 查找 SubViewport 中的相机节点
 	
 	if subviewport_node is SubViewport:
@@ -289,12 +303,12 @@ func _setup_scene_nodes(scene_instance: Control) -> void:
 		self.animation_player_container = animation_player_list
 		#print("找到AnimationPlayer列表容器")
 	
-	# 查找 VFXButton
-	var vfx_button_node = scene_instance.find_child("VFXButton", true, false)
+	# 查找 VFXExportButton
+	var vfx_button_node = scene_instance.find_child("VFXExportButton", true, false)
 	if vfx_button_node is Button:
 		self.vfx_button = vfx_button_node
 		vfx_button_node.pressed.connect(_on_vfx_button_pressed)
-		#print("找到 VFXButton 节点")
+		#print("找到 VFXExportButton 节点")
 	
 	# 查找 VFXMesh 节点
 	var vfx_mesh_node = scene_instance.find_child("VFXMesh", true, false)
@@ -309,8 +323,78 @@ func _setup_scene_nodes(scene_instance: Control) -> void:
 		loading_button_node.pressed.connect(_on_loading_button_pressed)
 		#print("找到 LoadingButton 节点")
 	
-	# 查找并连接按钮信号
-	_connect_button_signals(scene_instance)
+	# 查找 SaveButton
+	var save_button_node = scene_instance.find_child("SaveButton", true, false)
+	if save_button_node is Button:
+		save_button_node.pressed.connect(_on_save_camera_config_button_pressed)
+		#print("找到 SaveButton 节点")
+	
+	# 查找 CameraSelectedButton
+	var camera_selected_button = scene_instance.find_child("CameraSelectedButton", true, false)
+	if camera_selected_button is Button:
+		camera_selected_button.pressed.connect(_on_get_camera_button_pressed)
+	
+	# 查找 ModelSelectedButton
+	var model_selected_button = scene_instance.find_child("ModelSelectedButton", true, false)
+	if model_selected_button is Button:
+		model_selected_button.pressed.connect(_on_get_model_container_button_pressed)
+	
+	# 查找 UploadModelButton
+	var upload_model_button = scene_instance.find_child("UploadModelButton", true, false)
+	if upload_model_button is Button:
+		upload_model_button.pressed.connect(_on_upload_model_button_pressed)
+	
+	# 查找 ExportButton
+	var export_button = scene_instance.find_child("ExportButton", true, false)
+	if export_button is Button:
+		export_button.pressed.connect(_on_popup_button_pressed)
+	
+	# 查找 SelectedAnimation
+	var selected_animation_button = scene_instance.find_child("SelectedAnimation", true, false)
+	if selected_animation_button is Button:
+		selected_animation_button.pressed.connect(_on_get_animation_player_button_pressed)
+	
+	# 查找 PlayAllButton
+	var play_all_button = scene_instance.find_child("PlayAllButton", true, false)
+	if play_all_button is Button:
+		play_all_button.pressed.connect(_on_play_all_button_pressed)
+	
+	# 查找 PauseAllButton
+	var pause_all_button = scene_instance.find_child("PauseAllButton", true, false)
+	if pause_all_button is Button:
+		pause_all_button.pressed.connect(_on_pause_all_button_pressed)
+	
+	# 查找 StopAllButton
+	var stop_all_button = scene_instance.find_child("StopAllButton", true, false)
+	if stop_all_button is Button:
+		stop_all_button.pressed.connect(_on_stop_all_button_pressed)
+	
+	# 查找尺寸输入框
+	var width_input = scene_instance.find_child("WidthInputLineEdit", true, false)
+	var height_input = scene_instance.find_child("HeightInputLineEdit", true, false)
+	if width_input is LineEdit:
+		self.width_input_line_edit = width_input
+		# 连接信号
+		width_input.text_submitted.connect(_on_size_input_changed)
+		width_input.focus_exited.connect(_on_size_input_changed)
+	if height_input is LineEdit:
+		self.height_input_line_edit = height_input
+		height_input.text_submitted.connect(_on_size_input_changed)
+		height_input.focus_exited.connect(_on_size_input_changed)
+	
+	# 查找包裹 RealTimeTexture 的 ScrollContainer 节点（原 Control 节点）
+	var container_node = scene_instance.find_child("Control", true, false)
+	if container_node is ScrollContainer:
+		self.texture_container = container_node
+	
+	# 初始化尺寸输入框的默认值（从 RealTimeTexture 的当前尺寸读取）
+	if is_instance_valid(texture_rect_node) and texture_rect_node is TextureRect:
+		var default_width = int(texture_rect_node.custom_minimum_size.x)
+		var default_height = int(texture_rect_node.custom_minimum_size.y)
+		if default_width > 0 and is_instance_valid(width_input_line_edit):
+			width_input_line_edit.text = str(default_width)
+		if default_height > 0 and is_instance_valid(height_input_line_edit):
+			height_input_line_edit.text = str(default_height)
 	
 	# 初始化文件对话框
 	_initialize_file_dialog()
@@ -319,46 +403,6 @@ func _setup_scene_nodes(scene_instance: Control) -> void:
 	if dock_panel_instance:
 		dock_panel_instance.gui_input.connect(_on_plugin_panel_gui_input)
 		#print("已连接插件面板鼠标点击检测信号")
-
-# 连接按钮信号
-func _connect_button_signals(scene_instance: Control) -> void:
-	# 查找所有按钮并连接信号
-	var buttons = _find_all_buttons(scene_instance)
-	
-	for button in buttons:
-		match button.text:
-			"相机选中(Selected)":
-				button.pressed.connect(_on_get_camera_button_pressed)
-			"ModelContainer选中(Selected)":
-				button.pressed.connect(_on_get_model_container_button_pressed)
-			"上传模型(Upload Model)":
-				button.pressed.connect(_on_upload_model_button_pressed)
-			"图片和动画导出(Image and Animation Export)":
-				button.pressed.connect(_on_popup_button_pressed)
-			"选中动画(Selected AnimationPlayer)":
-				button.pressed.connect(_on_get_animation_player_button_pressed)
-			"播放所有▶":
-				button.pressed.connect(_on_play_all_button_pressed)
-			"暂停所有⏸":
-				button.pressed.connect(_on_pause_all_button_pressed)
-			"停止所有(stop)":
-				button.pressed.connect(_on_stop_all_button_pressed)
-
-
-# 查找所有按钮
-func _find_all_buttons(node: Node) -> Array[Button]:
-	var buttons: Array[Button] = []
-	
-	if node is Button:
-		buttons.append(node)
-	
-	for child in node.get_children():
-		buttons.append_array(_find_all_buttons(child))
-	
-	return buttons
-
-
-
 
 # 创建主窗口
 func _create_main_window() -> void:
@@ -438,13 +482,7 @@ func _setup_preview_panel_references() -> void:
 		#print("未找到 RealTimeTexture 节点")
 		sprite2d2_node = null
 	
-	# 2. normal_mesh: SubViewport/Node3D/Camera/NormalMesh
-	var normal_mesh_node = dock_panel_instance.find_child("NormalMesh", true, false)
-	if not normal_mesh_node or not normal_mesh_node is MeshInstance3D:
-		#print("未找到 NormalMesh 节点")
-		normal_mesh_node = null
-	
-	# 3. vfx_mesh: SubViewport/Node3D/Camera/VFXMesh
+	# 2. vfx_mesh: SubViewport/Node3D/Camera/VFXMesh
 	var vfx_mesh_node = dock_panel_instance.find_child("VFXMesh", true, false)
 	if not vfx_mesh_node or not vfx_mesh_node is MeshInstance3D:
 		#print("未找到 VFXMesh 节点")
@@ -453,7 +491,7 @@ func _setup_preview_panel_references() -> void:
 	# 调用预览面板的set_external_references方法
 	# 传递threeToTwo实例的引用，而不是单个AnimationPlayer
 	if preview_panel_instance.has_method("set_external_references"):
-		preview_panel_instance.set_external_references(sprite2d2_node, self, normal_mesh_node)
+		preview_panel_instance.set_external_references(sprite2d2_node, self)
 		#print("已设置预览面板的外部引用（传递threeToTwo实例）")
 	# else:
 	# 	print("预览面板没有set_external_references方法")
@@ -514,9 +552,6 @@ func _on_preview_window_close_requested() -> void:
 		if preview_panel_instance.has_method("restore_original_materials"):
 			preview_panel_instance.restore_original_materials()
 			#print("已恢复所有MeshInstance3D的原始材质")
-	
-	# 隐藏threeToTwo中的NormalMesh节点
-	_hide_normal_mesh_in_three_to_two()
 	
 	# 从窗口中移除预览面板
 	if main_window != null and preview_panel_instance != null:
@@ -1215,24 +1250,6 @@ func _find_mesh_instances_recursive(node: Node, result: Array[MeshInstance3D]):
 
 
 # ============================================
-# 隐藏threeToTwo中的NormalMesh节点
-# ============================================
-
-# 隐藏threeToTwo中的NormalMesh节点
-func _hide_normal_mesh_in_three_to_two():
-	# 在dock_panel_instance中查找NormalMesh节点
-	if dock_panel_instance != null and is_instance_valid(dock_panel_instance):
-		var normal_mesh_node = dock_panel_instance.find_child("NormalMesh", true, false)
-		if normal_mesh_node != null and normal_mesh_node is MeshInstance3D:
-			normal_mesh_node.visible = false
-			#print("已隐藏threeToTwo中的NormalMesh节点")
-		else:
-			print("未找到threeToTwo中的NormalMesh节点")
-	else:
-		print("dock_panel_instance无效，无法隐藏NormalMesh节点")
-
-
-# ============================================
 # 场景相机跟随功能
 # ============================================
 
@@ -1288,11 +1305,12 @@ func _on_scene_follow_checkbutton_toggled(button_pressed: bool) -> void:
 			# 立即同步一次
 			if selected_camera_node != null and is_instance_valid(selected_camera_node):
 				selected_camera_node.global_transform = scene_camera.global_transform
-				# 注释掉相机属性同步，只同步位置和旋转
-				# selected_camera_node.fov = scene_camera.fov
-				# selected_camera_node.near = scene_camera.near
-				# selected_camera_node.far = scene_camera.far
-				# selected_camera_node.projection = scene_camera.projection
+				# 同步相机投影模式和相关属性
+				selected_camera_node.projection = scene_camera.projection
+				selected_camera_node.size = scene_camera.size
+				selected_camera_node.fov = scene_camera.fov
+				selected_camera_node.near = scene_camera.near
+				selected_camera_node.far = scene_camera.far
 				#print("已立即同步到编辑器相机位置")
 		else:
 			print("提示：请在3D编辑器中移动鼠标以获取编辑器相机引用")
@@ -1304,7 +1322,7 @@ func _on_scene_follow_checkbutton_toggled(button_pressed: bool) -> void:
 # 纹理缓存功能
 # ============================================
 
-# VFXButton 点击事件
+# VFXExportButton 点击事件
 func _on_vfx_button_pressed() -> void:
 	# 第一步：关闭现有的 vfx_preview_panel 窗口（如果存在）
 	_close_existing_vfx_preview_panel()
@@ -1541,7 +1559,7 @@ func _setup_vfx_preview_panel_references():
 	# 调用预览面板的 set_external_references 方法
 	if vfx_preview_panel_instance.has_method("set_external_references"):
 		# 传递必要的引用
-		vfx_preview_panel_instance.set_external_references(texture_rect, self, null)
+		vfx_preview_panel_instance.set_external_references(texture_rect, self)
 		#print("已设置 VFX 预览面板的外部引用")
 	
 	# 传递缓存的纹理数组
@@ -1632,13 +1650,34 @@ func _on_camera_config_file_selected(path: String):
 	if camera_config["export_size"].has("height"):
 		loaded_export_height = float(camera_config["export_size"]["height"])
 	
+	# 保存加载的预览面板尺寸
+	if camera_config.has("preview_panel_size"):
+		if camera_config["preview_panel_size"].has("width"):
+			loaded_preview_panel_width = float(camera_config["preview_panel_size"]["width"])
+		if camera_config["preview_panel_size"].has("height"):
+			loaded_preview_panel_height = float(camera_config["preview_panel_size"]["height"])
+	
 	#print("已保存加载的尺寸: " + str(loaded_export_width) + "x" + str(loaded_export_height))
 	
 	# 应用相机配置
 	_apply_camera_config(camera_config)
 	
-	# 更新预览面板的宽度和高度
-	_update_preview_panel_size(camera_config["export_size"])
+	# 更新预览面板的宽度和高度（使用 preview_panel_size，如果没有则用 export_size 的十分之一）
+	if camera_config.has("preview_panel_size"):
+		_update_preview_panel_size(camera_config["preview_panel_size"])
+	else:
+		_update_preview_panel_size(camera_config["export_size"])
+	
+	# 同步更新主面板的尺寸输入框
+	if camera_config["export_size"].has("width") and camera_config["export_size"].has("height"):
+		var load_width = camera_config["export_size"]["width"]
+		var load_height = camera_config["export_size"]["height"]
+		if is_instance_valid(width_input_line_edit):
+			width_input_line_edit.text = str(load_width)
+		if is_instance_valid(height_input_line_edit):
+			height_input_line_edit.text = str(load_height)
+		# 触发尺寸更新
+		_update_texture_size()
 
 # 应用相机配置
 func _apply_camera_config(config: Dictionary):
@@ -1673,6 +1712,14 @@ func _apply_camera_config(config: Dictionary):
 	if camera_data.has("far"):
 		selected_camera_node.far = camera_data["far"]
 	
+	# 应用投影模式（0=透视, 1=正交）
+	if camera_data.has("projection"):
+		selected_camera_node.projection = camera_data["projection"]
+	
+	# 应用正交尺寸
+	if camera_data.has("size"):
+		selected_camera_node.size = camera_data["size"]
+	
 	if camera_data.has("scale"):
 		var scale_data = camera_data["scale"]
 		selected_camera_node.scale = Vector3(scale_data["x"], scale_data["y"], scale_data["z"])
@@ -1680,15 +1727,17 @@ func _apply_camera_config(config: Dictionary):
 	#print("已应用相机配置到: " + selected_camera_node.name)
 
 # 更新预览面板尺寸
-func _update_preview_panel_size(export_size: Dictionary):
+func _update_preview_panel_size(size_dict: Dictionary):
 	# 检查预览面板是否已创建
 	if preview_panel_instance == null or not is_instance_valid(preview_panel_instance):
 		#print("预览面板未创建，无法更新尺寸")
 		return
 	
 	# 获取宽度和高度
-	var width = export_size.get("width", 100)
-	var height = export_size.get("height", 100)
+	# 注意：如果传入的是 export_size，需要除以10得到预览面板尺寸
+	# 如果传入的是 preview_panel_size，则直接使用
+	var width = size_dict.get("width", 100)
+	var height = size_dict.get("height", 100)
 	
 	# 更新预览面板的宽度和高度输入框
 	if preview_panel_instance.has_method("set_export_size"):
@@ -1706,6 +1755,107 @@ func _update_preview_panel_size(export_size: Dictionary):
 			height_input.text = str(height)
 		
 		#print("已设置宽度和高度输入框: " + str(width) + "x" + str(height))
+
+# SaveButton 点击事件 - 保存相机配置
+func _on_save_camera_config_button_pressed():
+	if selected_camera_node == null or not is_instance_valid(selected_camera_node):
+		printerr("没有选中的相机，请先选中一个相机节点")
+		return
+	
+	# 创建保存文件对话框
+	var save_dialog = FileDialog.new()
+	save_dialog.title = "保存相机配置文件"
+	save_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	save_dialog.access = FileDialog.ACCESS_FILESYSTEM
+	save_dialog.filters = ["*.json ; JSON 文件"]
+	save_dialog.current_dir = ProjectSettings.globalize_path("res://")
+	save_dialog.current_file = "camera_config.json"
+	
+	# 连接信号
+	save_dialog.file_selected.connect(_on_save_camera_config_file_selected)
+	save_dialog.canceled.connect(_on_camera_config_dialog_canceled.bind(save_dialog))
+	save_dialog.close_requested.connect(_on_camera_config_dialog_canceled.bind(save_dialog))
+	
+	# 添加到编辑器界面
+	get_editor_interface().get_base_control().add_child(save_dialog)
+	
+	# 显示对话框
+	save_dialog.popup_centered(Vector2i(800, 600))
+
+# 保存相机配置文件选择事件
+func _on_save_camera_config_file_selected(path: String):
+	if selected_camera_node == null or not is_instance_valid(selected_camera_node):
+		printerr("没有选中的相机，无法保存")
+		return
+	
+	# 从 SubViewport 获取实际生效的渲染尺寸
+	var export_width = 100
+	var export_height = 100
+	if is_instance_valid(subviewport_camera):
+		var subviewport = subviewport_camera.get_parent().get_parent()
+		if subviewport is SubViewport:
+			export_width = subviewport.size.x
+			export_height = subviewport.size.y
+	
+	# 获取 PreviewPanel 中的 WidthInput 和 HeightInput 的值（如果没有就默认 export_size 的十分之一）
+	var preview_panel_width = export_width / 10.0
+	var preview_panel_height = export_height / 10.0
+	if is_instance_valid(preview_panel_instance):
+		var pp_width_input = preview_panel_instance.find_child("WidthInput", true, false)
+		var pp_height_input = preview_panel_instance.find_child("HeightInput", true, false)
+		if pp_width_input is LineEdit:
+			preview_panel_width = float(pp_width_input.text) if pp_width_input.text.is_valid_float() else export_width / 10.0
+		if pp_height_input is LineEdit:
+			preview_panel_height = float(pp_height_input.text) if pp_height_input.text.is_valid_float() else export_height / 10.0
+	
+	# 创建相机配置字典（与 preview_panel.gd 中的格式一致）
+	var camera_config = {
+		"version": "1.0",
+		"camera": {
+			"position": {
+				"x": selected_camera_node.global_position.x,
+				"y": selected_camera_node.global_position.y,
+				"z": selected_camera_node.global_position.z
+			},
+			"rotation": {
+				"x": selected_camera_node.global_transform.basis.get_rotation_quaternion().x,
+				"y": selected_camera_node.global_transform.basis.get_rotation_quaternion().y,
+				"z": selected_camera_node.global_transform.basis.get_rotation_quaternion().z,
+				"w": selected_camera_node.global_transform.basis.get_rotation_quaternion().w
+			},
+			"fov": selected_camera_node.fov,
+			"near": selected_camera_node.near,
+			"far": selected_camera_node.far,
+			"projection": selected_camera_node.projection,
+			"size": selected_camera_node.size,
+			"scale": {
+				"x": selected_camera_node.scale.x,
+				"y": selected_camera_node.scale.y,
+				"z": selected_camera_node.scale.z
+			}
+		},
+		"export_size": {
+			"width": export_width,
+			"height": export_height
+		},
+		"preview_panel_size": {
+			"width": preview_panel_width,
+			"height": preview_panel_height
+		},
+		"timestamp": Time.get_datetime_string_from_system()
+	}
+	
+	# 转换为JSON字符串
+	var json_string = JSON.stringify(camera_config, "\t")
+	
+	# 保存到文件
+	var file = FileAccess.open(path, FileAccess.WRITE)
+	if file != null:
+		file.store_string(json_string)
+		file.close()
+		#print("相机配置已保存到: " + path)
+	else:
+		printerr("无法保存相机配置文件: " + path)
 
 # 相机配置对话框取消事件
 func _on_camera_config_dialog_canceled(dialog: FileDialog):
@@ -2156,3 +2306,43 @@ func _on_plugin_panel_gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.pressed:
 		# 同步循环状态
 		sync_animation_loop_states()
+
+
+# ============================================
+# 尺寸输入框控制功能
+# ============================================
+
+# 尺寸输入框值变化处理（text_submitted 和 focus_exited 信号共用）
+func _on_size_input_changed(new_text: String = "") -> void:
+	_update_texture_size()
+
+# 更新纹理尺寸：同时更新 RealTimeTexture 和 SubViewport 的尺寸
+func _update_texture_size() -> void:
+	# 检查输入框是否有效
+	if not is_instance_valid(width_input_line_edit) or not is_instance_valid(height_input_line_edit):
+		return
+	
+	# 解析宽度和高度
+	var width = int(width_input_line_edit.text)
+	var height = int(height_input_line_edit.text)
+	
+	# 验证尺寸必须大于0
+	if width <= 0 or height <= 0:
+		print("错误：尺寸必须大于0")
+		return
+	
+	# 1. 更新 ScrollContainer/VBoxContainer/Control（ScrollContainer）的 custom_minimum_size
+	if is_instance_valid(texture_container):
+		texture_container.custom_minimum_size = Vector2(width, height)
+	
+	# 2. 更新 RealTimeTexture 的 custom_minimum_size（容器布局模式下只设置 custom_minimum_size）
+	if is_instance_valid(texture_rect):
+		texture_rect.custom_minimum_size = Vector2(width, height)
+	
+	# 3. 更新 SubViewport 的 size
+	if is_instance_valid(subviewport_camera):
+		var subviewport = subviewport_camera.get_parent().get_parent()
+		if subviewport is SubViewport:
+			subviewport.size = Vector2i(width, height)
+			# 强制 SubViewport 更新
+			subviewport.render_target_update_mode = SubViewport.UPDATE_ONCE

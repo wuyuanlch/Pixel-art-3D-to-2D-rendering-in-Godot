@@ -9,8 +9,7 @@ shader_parameter/bg_color = Color(0, 0, 0, 1)
 shader_parameter/threshold = 1.0
 shader_parameter/softness = 0.0
 
-[node name="VFXPreviewPanel" type="Control" unique_id=799404303 node_paths=PackedStringArray("previewTexture", "closePreviewButton", "zoomInButton", "zoomOutButton", "resetZoomButton", "zoomLabel", "widthInput", "heightInput", "materialSelector", "previewExportButton", "putongExportButton", "exportBothButton", "frameSlider", "frameInfoLabel", "playPauseButton", "prevFrameButton", "nextFrameButton", "frameIntervalInput", "batchExportButton", "interpolationSelector", "saveFileDialog", "selectDirDialog", "widthLabel", "heightLabel", "interpolationLabel", "materialLabel", "animationLabel", "material_threshold_hslider", "material_softness_hslider", "material_color_picker", "material_thre_hslider_label", "material_soft_hslider_label", "cycle_check_button")]
-visible = false
+[node name="VFXPreviewPanel" type="Control" unique_id=799404303 node_paths=PackedStringArray("previewTexture", "closePreviewButton", "zoomInButton", "zoomOutButton", "resetZoomButton", "zoomLabel", "widthInput", "heightInput", "lockCheckBox", "materialSelector", "previewExportButton", "putongExportButton", "exportBothButton", "frameSlider", "frameInfoLabel", "playPauseButton", "prevFrameButton", "nextFrameButton", "frameIntervalInput", "batchExportButton", "interpolationSelector", "saveFileDialog", "selectDirDialog", "widthLabel", "heightLabel", "interpolationLabel", "materialLabel", "animationLabel", "material_threshold_hslider", "material_softness_hslider", "material_color_picker", "material_thre_hslider_label", "material_soft_hslider_label", "cycle_check_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,6 +25,7 @@ resetZoomButton = NodePath("ControlButtons/ResetZoomButton")
 zoomLabel = NodePath("ControlButtons/ZoomLabel")
 widthInput = NodePath("SizeControls/WidthInput")
 heightInput = NodePath("SizeControls/HeightInput")
+lockCheckBox = NodePath("SizeControls/LockCheckBox")
 materialSelector = NodePath("MaterialControls/MaterialSelector")
 previewExportButton = NodePath("Export/PreviewExportButton")
 putongExportButton = NodePath("Export/PutongExportButton")
@@ -105,77 +105,62 @@ grow_horizontal = 0
 theme_override_font_sizes/font_size = 22
 text = "×"
 
-[node name="SizeControls" type="Control" parent="." unique_id=1221097539]
+[node name="SizeControls" type="HBoxContainer" parent="." unique_id=117455115]
 layout_mode = 1
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 47.0
+offset_top = 36.0
+offset_right = 426.0
+offset_bottom = 76.0
+theme_override_constants/separation = 20
 
 [node name="WidthLabel" type="Label" parent="SizeControls" unique_id=2084888198]
-layout_mode = 0
-offset_left = 48.0
-offset_top = 38.0
-offset_right = 92.0
-offset_bottom = 69.0
+layout_mode = 2
 text = "宽度(Width)"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="WidthInput" type="LineEdit" parent="SizeControls" unique_id=1988893897]
-layout_mode = 0
-offset_left = 163.0
-offset_top = 38.0
-offset_right = 246.6875
-offset_bottom = 74.0
+layout_mode = 2
 text = "100"
 alignment = 1
 
 [node name="HeightLabel" type="Label" parent="SizeControls" unique_id=221262434]
-layout_mode = 0
-offset_left = 280.0
-offset_top = 38.0
-offset_right = 374.0
-offset_bottom = 69.0
+layout_mode = 2
 text = "高度(Height)"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="HeightInput" type="LineEdit" parent="SizeControls" unique_id=1710854767]
-layout_mode = 0
-offset_left = 406.0
-offset_top = 38.0
-offset_right = 489.6875
-offset_bottom = 74.0
+layout_mode = 2
 text = "100"
 alignment = 1
 
+[node name="LockCheckBox" type="CheckBox" parent="SizeControls" unique_id=1103054853]
+layout_mode = 2
+button_pressed = true
+text = "锁定(Lock)"
+
 [node name="InterpolationControls" type="Control" parent="." unique_id=1808083219]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -20.0
-offset_right = 20.0
-offset_bottom = 40.0
-grow_horizontal = 2
+anchors_preset = 0
+offset_left = 56.0
+offset_top = 419.0
+offset_right = 284.0
+offset_bottom = 468.0
 
 [node name="InterpolationLabel" type="Label" parent="InterpolationControls" unique_id=1832394891]
 layout_mode = 0
-offset_left = -26.0
-offset_top = 29.0
-offset_right = 166.0
-offset_bottom = 78.0
+offset_right = 192.0
+offset_bottom = 49.0
 text = "插值算法
 (Interpolation algorithm)"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="InterpolationSelector" type="OptionButton" parent="InterpolationControls" unique_id=1115502095]
 layout_mode = 0
-offset_left = 203.0
-offset_top = 38.0
-offset_right = 376.0
-offset_bottom = 74.0
+offset_top = 67.0
+offset_right = 233.0
+offset_bottom = 116.0
 text_overrun_behavior = 3
 selected = 0
 item_count = 5

@@ -27,7 +27,10 @@ var dragStartPosition: Vector2
 # 尺寸控制相关变量
 @export var widthInput: LineEdit
 @export var heightInput: LineEdit
+@export var lockCheckBox: CheckBox  # 锁定比例复选框
 var currentSize: Vector2 = Vector2(100, 100)
+var aspect_ratio: float = 1.0  # 当前宽高比（width / height）
+var is_locked: bool = true  # 是否锁定比例（默认开启）
 
 # 材质控制相关变量
 @export var materialSelector: OptionButton
@@ -125,6 +128,10 @@ func _ready():
 		frameIntervalInput.text_submitted.connect(_on_frame_interval_input_submitted)
 		frameIntervalInput.focus_exited.connect(_on_frame_interval_input_focus_exited)
 	
+	# 连接锁定比例复选框信号
+	if lockCheckBox != null:
+		lockCheckBox.toggled.connect(_on_lock_checkbox_toggled)
+	
 	# 材质控制信号
 	materialSelector.item_selected.connect(_on_material_selected)
 	
@@ -186,10 +193,9 @@ func _process(delta):
 	pass
 
 # 设置外部节点引用
-func set_external_references(sprite2d: TextureRect, three_to_two_instance: threeToTwo, normal_mesh: MeshInstance3D):
+func set_external_references(sprite2d: TextureRect, three_to_two_instance: threeToTwo):
 	sprite2D2 = sprite2d
 	three_to_two_ref = three_to_two_instance
-	# normalMesh = normal_mesh
 
 # 辅助方法：控制所有选中的AnimationPlayer
 func _control_all_selected_animation_players(action: String, time: float = 0.0) -> void:
@@ -252,20 +258,37 @@ func _update_animation_length():
 func show_vfx_preview():
 	# 检查是否有加载的宽度和高度，如果有则使用保存的值
 	if three_to_two_ref != null:
-		# 检查是否有保存的宽度和高度（大于0表示有保存的值）
-		if three_to_two_ref.loaded_export_width > 0 and three_to_two_ref.loaded_export_height > 0:
-			# 使用保存的宽度和高度
-			currentSize = Vector2(three_to_two_ref.loaded_export_width, three_to_two_ref.loaded_export_height)
+		# 优先使用保存的预览面板尺寸（preview_panel_size）
+		if three_to_two_ref.loaded_preview_panel_width > 0 and three_to_two_ref.loaded_preview_panel_height > 0:
+			# 使用保存的预览面板尺寸
+			currentSize = Vector2(three_to_two_ref.loaded_preview_panel_width, three_to_two_ref.loaded_preview_panel_height)
 			
 			# 更新输入框显示
 			if widthInput != null:
-				widthInput.text = str(three_to_two_ref.loaded_export_width)
+				widthInput.text = str(three_to_two_ref.loaded_preview_panel_width)
 			if heightInput != null:
-				heightInput.text = str(three_to_two_ref.loaded_export_height)
+				heightInput.text = str(three_to_two_ref.loaded_preview_panel_height)
+		# 其次使用保存的导出尺寸（export_size 的十分之一）
+		elif three_to_two_ref.loaded_export_width > 0 and three_to_two_ref.loaded_export_height > 0:
+			# 使用保存的宽度和高度（预览面板显示为 export_size 的十分之一）
+			currentSize = Vector2(three_to_two_ref.loaded_export_width / 10.0, three_to_two_ref.loaded_export_height / 10.0)
 			
-			#print("VFX预览面板使用加载的尺寸: " + str(three_to_two_ref.loaded_export_width) + "x" + str(three_to_two_ref.loaded_export_height))
-		# else:
-		# 	print("VFX预览面板没有加载的尺寸，使用默认尺寸: " + str(currentSize.x) + "x" + str(currentSize.y))
+			# 更新输入框显示
+			if widthInput != null:
+				widthInput.text = str(three_to_two_ref.loaded_export_width / 10.0)
+			if heightInput != null:
+				heightInput.text = str(three_to_two_ref.loaded_export_height / 10.0)
+		else:
+			# 没有加载的尺寸，从 SubViewport 获取当前 export_size 的十分之一
+			var subviewport_camera = three_to_two_ref.subviewport_camera
+			if is_instance_valid(subviewport_camera):
+				var subviewport = subviewport_camera.get_parent().get_parent()
+				if subviewport is SubViewport and subviewport.size.x > 0 and subviewport.size.y > 0:
+					currentSize = Vector2(subviewport.size.x / 10.0, subviewport.size.y / 10.0)
+					if widthInput != null:
+						widthInput.text = str(subviewport.size.x / 10.0)
+					if heightInput != null:
+						heightInput.text = str(subviewport.size.y / 10.0)
 	
 	# 检测动画管理器循环状态，并设置纹理循环按钮
 	if three_to_two_ref != null:
@@ -309,6 +332,10 @@ func show_vfx_preview():
 	else:
 		printerr("Sprite2D2节点为空")
 		return
+	
+	# 更新宽高比（用于锁定比例功能）
+	if currentSize.y > 0:
+		aspect_ratio = currentSize.x / currentSize.y
 	
 	# 重置缩放和位置
 	currentZoom = 1.0
@@ -502,14 +529,38 @@ func _on_size_input_submitted(newText: String):
 func _on_size_input_focus_exited():
 	_apply_size_from_input()
 
+# 锁定比例复选框切换事件
+func _on_lock_checkbox_toggled(button_pressed: bool):
+	is_locked = button_pressed
+	if is_locked:
+		# 锁定比例时，根据当前尺寸更新宽高比
+		if currentSize.y > 0:
+			aspect_ratio = currentSize.x / currentSize.y
+
 # 从输入框应用尺寸
 func _apply_size_from_input():
 	if widthInput == null or heightInput == null:
 		return
 	
-	var width: int = int(widthInput.text)
-	var height: int = int(heightInput.text)
+	var width: float = float(widthInput.text)
+	var height: float = float(heightInput.text)
 	if width > 0 and height > 0:
+		# 如果锁定比例，根据改变的输入框自动调整另一个
+		if is_locked and aspect_ratio > 0:
+			# 判断哪个输入框最后获得焦点，以它为准计算另一个
+			if widthInput.has_focus():
+				# 宽度改变，按比例计算高度（float精度）
+				height = width / aspect_ratio
+				if height <= 0:
+					height = 1.0
+				heightInput.text = str(height)
+			elif heightInput.has_focus():
+				# 高度改变，按比例计算宽度（float精度）
+				width = height * aspect_ratio
+				if width <= 0:
+					width = 1.0
+				widthInput.text = str(width)
+		
 		currentSize = Vector2(width, height)
 		
 		# 如果有缓存的纹理，从原始纹理重新处理所有纹理
@@ -1042,8 +1093,7 @@ func _on_putong_export_pressed():
 		materialSelector.select(0)  # 选择普通材质
 		isNormalMode = false
 		
-		# 切换到普通材质，隐藏normalMesh
-		# normalMesh.visible = false  # 隐藏normalMesh
+		# 切换到普通材质
 		# 为所有MeshInstance3D恢复原始材质
 		_apply_material_to_all_meshes(originalMaterial)
 		_update_preview_from_animation()
@@ -1242,7 +1292,6 @@ func _start_batch_export():
 			materialSelector.select(0)
 			await wait_for_frame_render()
 			isNormalMode = false
-			# normalMesh.visible = false
 			_apply_material_to_all_meshes(originalMaterial)
 			_update_preview_from_animation()
 			await wait_for_frame_render()
@@ -1273,15 +1322,6 @@ func _start_batch_export():
 		# 如果前进后超过总帧数，设置为最后一帧
 		if frameIndex >= totalFrames:
 			frameIndex = totalFrames - 1
-	
-	# 恢复原始材质模式
-	# if originalNormalMode != isNormalMode:
-	# 	print("恢复原始材质模式: %s" % ("法线材质" if originalNormalMode else "普通材质"))
-	# 	materialSelector.select(1 if originalNormalMode else 0)
-	# 	isNormalMode = originalNormalMode
-	# 	normalMesh.visible = originalNormalMode
-	# 	_apply_material_to_all_meshes(normalMaterial if originalNormalMode else originalMaterial)
-	# 	_update_preview_from_animation())
 	
 	# 保存相机配置到批量导出目录
 	_save_camera_config_to_batch_export_dir(animationDir)
@@ -1340,10 +1380,6 @@ func reset():
 	# 重置预览纹理
 	if previewTexture != null:
 		previewTexture.texture = null
-	
-	# 隐藏normalMesh
-	# if normalMesh != null:
-	# 	normalMesh.visible = false
 	
 	# 清空网格列表
 	allMeshes.clear()
@@ -1688,6 +1724,15 @@ func _save_camera_config_to_batch_export_dir(animationDir: String):
 		#print("没有选中的相机，无法保存相机配置")
 		return
 	
+	# 从 SubViewport 获取实际生效的渲染尺寸
+	var export_width = 100
+	var export_height = 100
+	if three_to_two_ref != null and is_instance_valid(three_to_two_ref.subviewport_camera):
+		var subviewport = three_to_two_ref.subviewport_camera.get_parent().get_parent()
+		if subviewport is SubViewport:
+			export_width = subviewport.size.x
+			export_height = subviewport.size.y
+	
 	# 创建相机配置字典
 	var camera_config = {
 		"version": "1.0",
@@ -1713,8 +1758,12 @@ func _save_camera_config_to_batch_export_dir(animationDir: String):
 			}
 		},
 		"export_size": {
-			"width": int(currentSize.x),
-			"height": int(currentSize.y)
+			"width": export_width,
+			"height": export_height
+		},
+		"preview_panel_size": {
+			"width": currentSize.x,
+			"height": currentSize.y
 		},
 		"timestamp": Time.get_datetime_string_from_system()
 	}
